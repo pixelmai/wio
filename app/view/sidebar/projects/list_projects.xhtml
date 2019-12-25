@@ -1,0 +1,10 @@
+<?r unless @me.projects.all({:status => 1 }).length == 0 ?>
+  <div class="sidebar_container">
+  <h3>My other projects</h3>
+  <ul>
+  <?r @me.projects.all({:status => 1 }).each do |project| ?>
+    <li><a href="/my_account/projects/#{u(project.name)}">#{project.name}</a></li>
+  <?r end ?>
+  </ul>
+  </div>
+<?r end ?>

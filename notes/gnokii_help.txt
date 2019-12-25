@@ -1,0 +1,124 @@
+Usage:
+	gnokii [CONFIG OPTIONS] OPTIONS
+
+CONFIG OPTIONS
+		--config filename
+		--phone phone_section
+
+OPTIONS
+Use just one option at a time.
+General options:
+          --help
+          --version
+          --shell
+Monitoring options:
+          --monitor [delay|once]
+          --getdisplaystatus
+          --displayoutput
+          --netmonitor {reset|off|field|devel|next|nr}
+SMS options:
+          --sendsms destination [--smsc message_center_number |
+                 --smscno message_center_index] [-r|--report] [-8|--8bit]
+                 [-C|--class n] [-v|--validity n] [-l|--long n]
+                 [-i|--imelody] [-a|--animation file;file;file;file]
+                 [-o|--concat this;total;serial] [-w|--wappush url]
+          --savesms [--sender from] [--smsc message_center_number |
+                 --smscno message_center_index] [-f|--folder folder_id]
+                 [-l|--location number] [-s|--sent|-r|--read] [-d|--deliver]
+                 [-t|--datetime YYMMDDHHMMSS]
+          --getsms memory_type start [end] [-f|--file file]
+                 [-F|--force-file file] [-a|--append-file file]
+                 [-d|--delete]
+          --deletesms memory_type start [end]
+          --getsmsc [start_number [end_number]] [-r|--raw]
+          --setsmsc
+          --createsmsfolder name
+          --deletesmsfolder folderid
+          --showsmsfolderstatus
+          --smsreader
+Phonebook options:
+          --getphonebook memory_type start_number [end_number|end]
+                 [[-r|--raw]|[-v|--vcard]|[-l|--ldif]]
+          --writephonebook [[-o|--overwrite]|[-f|--find-free]]
+                 [-m|--memory-type|--memory memory_type]
+                 [-n|--memory-location|--location number]
+                 [[-v|--vcard]|[-l|--ldif]]
+          --deletephonebook memory_type start_number [end_number|end]
+Calendar options:
+          --getcalendarnote start_number [end_number|end] [-v|--vCal]
+          --writecalendarnote vcalendarfile start_number [end_number|end]
+          --deletecalendarnote start [end_number|end]
+ToDo options:
+          --gettodo start_number [end_number|end] [-v|--vCal]
+          --writetodo vcalendarfile start_number [end_number|end]
+          --deletealltodos
+Dialling and call options:
+          --getspeeddial location
+          --setspeeddial number memory_type location
+          --dialvoice number
+          --senddtmf string
+          --answercall callid
+          --hangup callid
+          --divert {--op|-o} {register|enable|query|disable|erasure}
+                 {--type|-t} {all|busy|noans|outofreach|notavail}
+                 {--call|-c} {all|voice|fax|data}
+                 [{--timeout|-m} time_in_seconds]
+                 [{--number|-n} number]
+All number, location and callid options need to be numeric.
+Profile options:
+          --getprofile [start_number [end_number]] [-r|--raw]
+          --setprofile
+          --getactiveprofile
+          --setactiveprofile profile_number
+Phone settings:
+          --reset [soft|hard]
+          --setdatetime [YYYY [MM [DD [HH [MM]]]]]
+          --getdatetime
+          --setalarm [HH MM]
+          --getalarm
+WAP options:
+          --getwapbookmark number
+          --writewapbookmark name URL
+          --deletewapbookmark number
+          --getwapsetting number [-r|raw]
+          --writewapsetting
+          --activatewapsetting number
+Logo options:
+          --sendlogo {caller|op|picture} destination logofile
+                 [network_code]
+          --setlogo op [logofile [network_code]]
+          --setlogo startup [logofile]
+          --setlogo caller [logofile [caller_group_number [group_name]]]
+          --setlogo {dealer|text} [text]
+          --getlogo op [logofile [network_code]]
+          --getlogo startup [logofile [network_code]]
+          --getlogo caller [caller_group_number [logofile
+                 [network code]]]
+          --getlogo {dealer|text}
+          --viewlogo logofile
+Ringtone options:
+          --sendringtone rtttlfile destination
+          --getringtone rtttlfile [location] [-r|--raw]
+          --setringtone rtttlfile [location] [-r|--raw] [--name name]
+          --playringtone rtttlfile [--volume vol]
+          --ringtoneconvert source destination
+          --getringtonelist
+          --deleteringtone start [end]
+Security options:
+          --identify
+          --getlocksinfo
+File options:
+          --getfilelist remote_path
+          --getfiledetailsbyid [id]
+          --getfileid remote_filename
+          --getfile remote_filename [local_filename]
+          --getfilebyid id [local_filename]
+          --getallfiles remote_path
+          --putfile local_filename remote_filename
+          --deletefile remote_filename
+          --deletefilebyid id
+Misc options:
+          --keysequence
+          --enterchar
+          --listnetworks
+          --getnetworkinfo

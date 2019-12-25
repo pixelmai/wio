@@ -1,0 +1,6 @@
+Run a script every minute:
+- run in terminal
+  crontab -e
+- add the following line
+*/1 * * * * /home/charlotte/Projects/wio/trunk/app/notify_cron.rb
+

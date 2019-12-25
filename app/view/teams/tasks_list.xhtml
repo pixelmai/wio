@@ -1,0 +1,81 @@
+<ul class="tasks">
+  <?r unless tasks.length == 0 ?>
+    <?r tasks.each do |task| ?>
+      
+        <li id="task_#{task.task_id}" 
+          <?r if task.overdue? and task.progress != 100 ?>class="overdue"<?r end ?>
+          <?r if task.deadline and task.days_countdown == 0 and task.completed == false ?>class="today"<?r end ?>
+        >
+          <div class="list_info">
+          
+            <?r if task.project.nil? or task.project.status == 1 ?>
+              <input type="checkbox" <?r if task.completed? ?>checked="checked"<?r end ?> 
+                name="completed" value="#{u(task.task_id)}" />    
+            <?r end ?> 
+           
+             
+             
+            <?r if task.completed == true ?>
+              <?r if task.project and task.project.status == 0 ?>
+                <input type="checkbox" <?r if task.completed? ?>checked="checked"<?r end ?> 
+                  name="completed" value="#{u(task.task_id)}" disabled="disabled" /> 
+              <?r end ?>
+                #{task.date_completed.strftime('%m/%d/%Y')}
+            <?r end ?>
+
+            <a href="/teams/#{@team.name}/tasks/#{u(task.task_id)}">
+              <strong>#{task.name}</strong>
+            </a>
+         
+           
+            <?r unless task.project.nil? ?>
+              <?r unless @where == 'project' ?>
+                <?r unless task.project.nil? ?>
+                  <?r unless task.team_name ?>
+                    <a href="/my_account/projects/#{u(task.project.name)}" title="#{task.project.name}">[P]</a>
+                  <?r else ?>
+                    <a href="/teams/#{u(task.team_name)}/projects/#{u(task.project.name)}" title="#{task.project.name}">[P]</a>
+                  <?r end ?>
+                <?r end ?>
+              <?r end ?>
+            <?r end ?>
+          </div>
+          
+          <div class="list_actions">
+            
+            <?r if task.deadline ?>
+              <span class="deadline">
+              <?r if task.overdue? and task.completed == false ?>
+                Overdue by #{task.days_overdue} <?r if task.days_overdue > 1 ?>days<?r else ?>day<?r end ?>
+              <?r elsif task.days_countdown == 0 and task.completed == false ?>
+                Due Today
+              <?r else ?>
+                <?r if task.completed == false ?>
+                  Due in #{task.days_countdown} <?r if task.days_countdown > 1 ?>days<?r else ?>day<?r end ?>
+                <?r end ?>
+              <?r end ?>
+              </span>
+            <?r end ?>   
+            
+
+            
+            
+            <?r if @team.team_lead == @me or task.user_username == @me.username ?>
+              <a href="/teams/#{u(@team.name)}/tasks/#{u(task.task_id)}?do=edit" class="list_item_edit" title="Edit">
+                <span>Edit</span>
+              </a>
+              <a href="/teams/#{u(@team.name)}/tasks/#{u(task.task_id)}?do=delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+                <span>Delete</span>
+              </a>  
+            <?r end ?>
+          </div>
+          <div class="clear"></div>
+          
+          
+          <!-- onclick="$.get('#{Rs()}/#{u(task.name)}/completed', {},
+                function(){alert('#{u(task.name)} is completed')}" -->
+        </li>
+      <?r end ?>
+
+  <?r end ?>
+</ul>

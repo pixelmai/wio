@@ -1,0 +1,34 @@
+
+===================================
+Subversion Commands:
+===================================
+
+Get Working Copy Information:
+- svn info
+
+Get Information of all modified files on current directory
+- svn status
+
+Update Working Copy:
+- svn update
+
+Commit Changes to Repository
+- svn commit -m "My comments about this commit"
+
+Revert to an old revision (e.g 800)
+- svn update -r 800
+
+Revert changes to a file (e.g. view/index.html)
+- svn revert view/index.html
+
+Revert changes to an entire directory (e.g. controller)
+- svn revert -R controller
+
+Revert changes to current directory
+- svn revert -R .
+
+Add a file (from svn status: ? file.txt)
+- svn add file.txt
+
+Remove a file (from svn status: ! file.txt)
+- svn delete file.txt

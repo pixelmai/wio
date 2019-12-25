@@ -1,0 +1,629 @@
+/*
+** Default Values
+*/
+
+#sibebar .fornotification{
+  display: inline !important;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+a {
+	font-family : Trebuchet MS, Arial, sans-serif, Tahoma, Verdana;
+	font-weight : bold;
+	text-decoration : none;
+	color: #096f8c;
+}
+
+a:hover {
+	text-decoration : underline;
+	font-weight : bold;
+	color : #05536a;
+}
+html,body{
+	font-family: Trebuchet MS, Arial, sans-serif, Tahoma, Verdana;
+	color: #666;
+}
+
+h1,h2,h3,h4,h5,h6{
+  color: #333;
+}
+
+ul, ol{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#content ul {
+  margin: 0 0 30px 0;
+}
+p{
+  padding: 5px 0 0 0;
+}
+.clear{
+  clear: both;
+}
+
+img{
+  border: 0px;
+}
+
+/*
+** Customized Header
+*/
+
+#header {
+  overflow: hidden;
+  background: #000;
+  width: 100%;
+  border-bottom: 5px solid #9ad0e0;
+}
+
+#header a#wio_logo{
+  float: left;
+  display: block;
+  width: 64px;
+  height: 31px;
+  background: url('/images/wio-logo.jpg') no-repeat;
+  padding: 0;
+  margin: 3px 10px 0 0;
+}
+
+#header a#wio_logo span{
+  display: none;
+}
+
+#header #account_links{
+  float: right;
+}
+
+
+
+
+/* 
+** NAVIGATIONS
+*/
+
+
+#account_links{
+  font-size: .7em;
+}
+
+#main_navigation {
+  
+}
+
+
+#main_navigation a{
+  font-size: 1em;
+  display: block;
+  padding: 10px 10px;
+  float: left;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+}
+
+#main_navigation .active, #main_navigation a:hover.active{
+  background-color: #9ad0e0;
+  color: #000;
+}
+
+#main_navigation a:hover {
+  background-color: #0d5266
+}
+
+#header #account_links a{
+  font-size: 1em;
+  padding: 12px 10px 13px 10px;
+}
+
+#sub_navigation{
+  font-size: .9em;
+  width: 100%;
+  background-color: #9ad0e0;
+  margin-top: -5px;
+  position: relative;
+}
+
+#sub_navigation a{
+  float: left;
+  display: block;
+  padding: 7px 10px 10px;
+  text-decoration: none;
+  color: #0d5266;
+}
+
+#sub_navigation a:hover{
+  color: #022e3b;
+}
+
+#sub_navigation a .link_text{
+  display: block;
+  padding: 0 0 7px;
+}
+
+#sub_navigation div.arrow{
+  width: 18px;
+  height: 9px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: -18px;
+}
+
+#sub_navigation div.arrow span{
+  background: url('/images/arrow.jpg') no-repeat;
+  width: 18px;
+  height: 9px;
+  display: none;
+}
+
+#sub_navigation .active div.arrow span{
+  display: block;
+}
+
+#sub_navigation a.active{
+  color: #000;
+}
+
+
+/*
+** content areas
+*/
+
+h2 {
+  font-size: 1.7em;
+  color: #0d5266;
+}
+
+
+#container, #navigation_container, #sub_navigation_container{
+  width:960px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+#content{
+  float:left;
+  width: 630px;
+  font-size: .9em;
+  line-height: 1.5em;
+  padding: 10px 20px 0 20px;  
+}
+
+#content h3{
+  display: block;
+  background: #d6f0e2;
+  text-transform: uppercase;
+  color: #417378;
+  padding: 5px 10px;
+  font-size: 1em;
+  margin: 0;
+  border-bottom: 1px solid #c2dccc;
+}
+
+#content h3 a{
+  color: #417378;
+}
+
+#sidebar{
+  float: right;
+  width: 268px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+#sidebar .sidebar_container{
+  background: #f3f3f3;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin: 0 0 10px 0;
+}
+
+#sidebar h3{
+  font-size: 1.05em;
+  padding: 0 0 5px 0;
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+#sidebar h3.collapsible{
+  padding: 0;
+  margin: 0;
+  border-bottom: 0;
+}
+#sidebar label, #sidebar legend span{
+  font-size: .8em;
+  display: block;
+}
+
+#sidebar #toggle_quick_add{
+  display: none;
+}
+
+#sidebar ul{
+  list-style-type: disc;
+  padding: 0 0 0 20px;
+  margin: 0 0 0 0;
+}
+
+#sidebar li strong{
+  padding: 0 0 5px 0;
+  font-size: .7em;
+}
+
+#sidebar .sidebar_nav li strong {
+  font-size: 1em;
+}
+
+#sidebar li a{
+  font-weight: normal;
+  font-size: .8em;
+}
+
+#sidebar li strong a{
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+#sidebar .view_all{
+  font-size: .8em;
+  text-align: right;
+  display: block;
+  padding: 2px 0 0 0;
+}
+
+#sidebar p{
+  font-size: .8em;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+/*
+** Error and Confirmation Messages
+*/
+
+#error {
+  background-color:#FAE2E3;
+  border:2px solid #E7838C;
+  color:#CC3024;
+  font-weight:bold;
+  margin: 15px 0;
+  padding: 5px 10px;
+}
+
+#confirm {
+  background-color:#E1FAD4;
+  border:2px solid #7BB95B;
+  color:#336919;
+  font-weight:bold;
+  margin: 15px 0;
+  padding:5px 10px;
+}
+
+#notice {
+  background-color:#ffa;
+  border:2px solid #c63;
+  color:#c51;
+  font-weight:bold;
+  margin: 15px 0;
+  padding:5px 10px;
+}
+
+#notice p, #error p, #confirm p {
+  padding: 5px;
+  margin: 0;
+}
+
+#notice ul, #error ul, #confirm ul {
+  margin: 0;
+}
+
+div#content ul li:hover{
+  background: #f5f5f5;
+}
+
+div#content ul li{
+  padding: 5px 10px 3px;
+  border-bottom: 1px solid #dedede;
+  font-size: .9em;
+}
+
+div#content li em a{
+  font-size: .85em;
+  color: #666;
+}
+
+div#content h4{
+  font-size: 1.3em;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+  border-bottom: 1px solid #ccc;
+  color: #0d5266;
+}
+
+.list_info {
+  float: left;
+}
+
+.list_actions {
+  float: right;
+  text-align: right;
+}
+
+.list_actions .list_item_delete{
+  float: left;
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 4px 2px;
+  background: url('/images/icons/delete.png');
+}
+
+.list_actions .list_item_edit{
+  float: left;
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 4px 2px;
+  background: url('/images/icons/edit.png');
+}
+
+.list_actions .list_item_message{
+  float: left;
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 4px 2px;
+  background: url('/images/icons/message.png');
+}
+
+.list_actions .list_item_leave_group{
+  float: left;
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 4px 2px;
+  background: url('/images/icons/team_leave.png');
+}
+
+.list_actions span{
+  display: none;
+}
+
+/*
+** buttons
+*/
+
+
+a.button{
+  background-color:#f1fdea;
+  border: 1px solid #7BB95B;
+  color:#306616;
+  padding: 10px;
+  width: 200px;
+  font-size: 16px;
+  margin-right:10px;
+}
+
+a:hover.button{
+  text-decoration: none;
+  background-color:#e7fbd8;
+  border: 1px solid #7BB95B;
+  color: #306616;
+}
+
+a.button img{
+  padding: 0 5px 0 0;
+}
+
+a.button span{
+  padding: 0;
+  margin: 0;
+}
+
+a.edit{
+  background-color: #fff1e8;
+  border: 1px solid #d99e7e;
+  color: #dc7835;
+}
+a:hover.edit{
+  background-color: #fbe8db;
+  border: 1px solid #d99e7e;
+  color: #c45f1c;
+}
+
+a.delete{
+  background-color:#FAE2E3;
+  border:1px solid #E7838C;
+  color:#CC3024;
+}
+
+a:hover.delete{
+  background-color:#f6d8da;
+  border:1px solid #E7838C;
+  color:#CC3024;
+}
+
+/*
+** forms
+*/
+#toggle_quick_add form{
+  padding: 5px 0 0 0;
+  border-top: 1px solid #ccc; 
+  margin: 5px 0 0 0;
+}
+
+#content form.search {
+  padding: 10px 0;
+}
+label, form strong{
+  font-weight: bold;
+  color: #777;
+}
+form li{
+  margin: 5px 0;
+}
+
+fieldset{
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+fieldset span{
+  font-weight: bold;
+}
+
+#sidebar textarea{
+width: 240px;
+height: 70px;
+}
+
+
+#content textarea{
+width: 500px;
+height: 70px;
+font-size: 1.4em;
+}
+
+#content textarea.post_content{
+width: 500px;
+height: 200px;
+}
+
+/*
+** People Page
+*/
+
+#teams_list em, #people_list em{
+  font-size: .85em;
+  color: #999 !important;
+}
+
+#teams_list .list_actions .list_item_add,
+#people_list .list_actions .list_item_add{
+  float: left;
+  display: block;
+  /*width: 16px;*/
+  height: 16px;
+  margin: 4px 2px;
+  background: url('/images/icons/contact_add.png') no-repeat;
+}
+
+#teams_list .list_actions .list_item_add{
+  background: url('/images/icons/team_join.png') no-repeat;
+}
+
+#teams_list .list_actions .list_item_add,
+#people_list .list_actions .list_item_add{
+  color: #336919;
+  font-size: .85em;
+}
+
+#teams_list .list_actions .list_item_add:hover,
+#people_list .list_actions .list_item_add:hover{
+  color: #444;
+  text-decoration: none;
+}
+
+#teams_list .list_actions .list_item_add span,
+#people_list .list_actions .list_item_add span{
+  display: inline;
+  padding: 0 0 0 20px;
+}
+
+.tasks .overdue a {
+  color: #9f2e2e;
+}
+
+.tasks .today a {
+  color: #d05c0f;
+}
+
+span.deadline{
+  display: block;
+  float: left;
+  padding: 0 5px 0 0;
+}
+
+#sidebar span, span.event_name{
+  font-size: .8em;
+}
+
+/*
+** PAGINATION
+*/
+
+.pagination{
+text-align: right;
+padding: 0;
+margin: 0 0 20px 0;
+}
+
+
+/*
+** DISCUSSION BOARD MISC
+*/
+
+ul.posts .stripe_1{
+  background: #eee;
+}
+
+ul.posts em{
+  display:block;
+  text-align: right;
+}
+
+ul.posts .list_actions{
+  float: right;
+  display: block;
+  text-align: right;
+}
+
+ul.posts .list_info{
+  float: none;
+}
+
+h4 a#no_link{
+  color: #0d5266;
+}
+h4 a#no_link:hover{
+  text-decoration: none;
+}
+
+
+.ordinary{
+  list-style-type: disc;
+  padding: 20px 0 20px 30px;
+}
+
+#content ul.ordinary li{
+  border-bottom: 0px;
+  padding: 2px;
+}
+
+#content ul.ordinary li:hover{
+  background: transparent;
+}
+
+table.messages th {
+  background-color: #ddd;
+  color: #444;
+}
+
+table.messages tr.unread td {
+  background-color: #e1f4e8;
+}
+
+table.messages tr.notice td a {
+  color:red;
+}
+
+

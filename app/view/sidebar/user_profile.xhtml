@@ -1,0 +1,97 @@
+<?r if @action == 'profile_management' ?>
+  <div class="sidebar_container">
+    <h3>Related Tasks</h3>
+    <ul>
+      <li>
+      <a href="/my_account/">Back to Profile</a>
+      </li>
+    </ul>
+  </div>
+<?r elsif @action == 'contacts' or @action == 'teams' ?>
+  <div class="sidebar_container">
+    <h3>Related Tasks</h3>
+    <ul>
+      <li>
+      <a href="/people/#{u(@user.username)}">Back to #{@user.username}'s Profile</a>
+      </li>
+    </ul>
+  </div>
+<?r else ?>
+<?r if logged_in? and @user_profile != @me ?>
+  <div class="sidebar_container">
+    <h3>User Actions</h3>
+      <ul>
+        <?r unless @user_profile.contacts.include? @me ?>
+          <li>
+            <a href="/people/#{u(@user.username)}/add_contact">Add Contact</a>
+          </li>
+        <?r end ?>
+        
+        
+        <?r unless @action == 'send_message' ?>
+          <li>
+           <a href="/people/#{u(@user.username)}/send_message">Send Message</a>
+          </li>
+          <?r if @user_profile.contacts.include? @me ?>
+            <li>
+              <a href="/my_account/contacts/#{u(@user.username)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+                Remove from Contacts
+              </a>
+            </li>
+          <?r end ?>
+        <?r else ?>
+          <li>
+           <a href="/people/#{u(@user.username)}/">Back to #{h(@user.username)}'s Profile</a>
+          </li>        
+        <?r end ?>
+
+      </ul>
+  </div>
+<?r end ?>
+  <?r unless @action == 'send_message' ?>
+    <div class="sidebar_container">
+      <h3>#{@user_profile.username}'s Contacts</h3>
+      <?r if @user_profile.contacts.length != 0 ?>
+        <ul>
+        <?r 
+          user_count = 0
+          user_contacts = @user_profile.contacts.all #limit display to 5... showing errors
+          user_contacts.each do |contact| 
+            user_count = user_count + 1
+            if user_count <= 5 ?>
+            <li>
+              <a href="/people/#{u(contact.username)}">#{contact.username}</a>
+            </li>
+            <?r end
+          end
+         ?>
+        </ul>
+        
+        <?r if @user_profile.contacts.length > 5 ?>
+          <a href="/people/#{@user_profile.username}/contacts" class="view_all">View all</a>
+        <?r end ?>
+        
+        <?r else ?>
+        <p>#{@user_profile.username} has no contacts yet.</p>
+        <?r end ?>
+    </div>
+
+    <div class="sidebar_container">
+      <h3>#{@user_profile.username}'s Teams</h3>
+      <?r if @user_profile.teams.length != 0 ?>
+        <ul>
+        <?r @user_profile.teams.all({:limit => 5}).each do |team| ?>
+          <li>
+            <a href="/teams/#{u(team.name)}">#{team.name}</a>
+          </li>
+        <?r end ?>
+        </ul>
+        <?r if @user_profile.teams.length > 5 ?>
+          <a href="/people/#{@user_profile.username}/teams" class="view_all">View all</a>
+        <?r end ?>
+        <?r else ?>
+        <p>#{@user_profile.username} has no teams yet.</p>
+        <?r end ?>
+    </div>
+  <?r end ?>
+<?r end ?>

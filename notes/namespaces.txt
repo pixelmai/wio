@@ -1,0 +1,25 @@
+=====================
+Users
+=====================
+
+/my_account/edit_profile
+/my_account/manage_account
+/my_account/
+
+/user/wayne
+/user/charlotte
+
+* A users contexts:
+/my_account/contexts
+
+* View a context (and its tasks e.g. "uncategorized")
+/my_account/contexts/uncategorized
+
+* Modify a context 
+/my_account/contexts/uncategorized/edit
+
+* Delete a context
+/my_account/contexts/uncategorized/delete
+
+* Adding a context:
+/my_account/add_context

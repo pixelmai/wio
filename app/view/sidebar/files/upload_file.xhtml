@@ -1,0 +1,40 @@
+<div class="sidebar_container">
+  <h3>Upload File</h3>
+  #{render_fragment 'notices.xhtml'}
+  <form name='file_upload' enctype="multipart/form-data" action='/my_account/file_upload' method='post'>
+    <ol>
+      <li>
+        <label for="name">Name*:</label>
+        <input type="text" name="name" id="name" value=""/>
+      </li>
+      
+      <li>
+        <label for="file">File*:</label>
+        <input type='file' name='file' size="15" />
+      </li>
+      <?r if @me.file_categories.length != 0 ?>
+        <li>
+          <label for="file_category">Category:</label>
+          <select id="file_category" name="file_category">
+            <?r @me.file_categories.each do |file_category| ?>
+              <option value="#{file_category.file_category_id}">#{file_category.name}</option>
+            <?r end ?>
+          </select>
+        </li>
+      <?r end ?>
+      <li>
+        <input type="submit" value="Upload File" />
+      </li>
+    </ol>
+  </form>
+</div>
+
+<div class="sidebar_container">
+  <h3>Related Tasks</h3>
+  <ul>
+    <li>
+      <a href="/my_account/files/categories">Manage File Categories</a>
+    </li>
+  </ul>
+</div>
+

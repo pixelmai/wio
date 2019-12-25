@@ -1,0 +1,27 @@
+<h2>Manage WIO Teams</h2>
+#{render_fragment 'notices.xhtml'}
+<?r unless @all_teams.nil? ?>
+  <ul id="teams_list">
+  
+    <?r @all_teams.each do |team| ?>
+
+      <li>
+        <div class="list_info">
+          <a href="/teams/#{u(team.name)}">#{team.name}</a> 
+        </div>
+        <div class="list_actions">
+          <a href="/admin/teams/#{u(team.name)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+            <span>Delete</span>
+          </a>
+        </div>  
+        <div class="clear"></div>
+      </li>
+    <?r end ?>
+  </ul>
+  <div class="pagination">
+    #{@page.navigation}
+  </div>
+<?r else ?>
+  <p>No teams registered yet...</p>
+<?r end ?>
+

@@ -1,0 +1,6 @@
+===================================
+DASHBOARD
+===================================
+
+** Each click in completing a task in dashboard increments the number of times 
+   a "Completed Alert" will show

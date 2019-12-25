@@ -1,0 +1,76 @@
+#{render_fragment 'sidebar/tasks/add_task.xhtml'}
+
+<?r calendar = @me.calendar
+  @events = calendar.calendar_events.all({:start_date.gte => Date.today, :order => [:start_date.asc], :limit => 3})
+?>
+
+<?r 
+mcount = @me.messages.all(:read => false, :recipient_username => @me.username, :notice => false).length
+ncount = @me.messages.all(:read => false, :recipient_username => @me.username, :notice => true).length
+rcount = @me.requests.latest.length
+
+if (mcount > 0) || (rcount > 0) || (ncount > 0)
+?>
+  <div class="sidebar_container">
+    <h3>Notifications</h3>
+    <ul>
+      <?r if (ncount > 0) ?>
+        <li>
+          <strong>
+            <a href="/my_account/messages">
+              #{ncount}
+              unread admin<?r if ncount > 1 ?>notices!<?r else ?>notice!<?r end ?>
+            </a>
+          </strong>
+        </li>
+      <?r end ?>
+      <?r if (rcount > 0) ?>
+        <li>
+          <strong>
+            <a href="/my_account/requests">
+              #{rcount} 
+              <?r if rcount > 1 ?>requests<?r else ?>request<?r end ?>
+            </a>
+          </strong>
+        </li>
+      <?r end ?>
+      <?r if (mcount > 0) ?>
+        <li>
+          <strong>
+            <a href="/my_account/messages">
+              #{mcount}
+              unread <?r if mcount > 1 ?>messages<?r else ?>message<?r end ?>
+            </a>
+          </strong>
+        </li>
+      <?r end ?>
+    </ul>
+  </div>
+<?r end ?>
+
+<?r unless @events.length == 0 ?>
+  <div class="sidebar_container">
+  <h3>Upcoming Events</h3>
+  <ul>
+  <?r @events.each do |event| ?>
+    <li><strong>#{event.start_date.strftime("%B %d, %Y")}</strong><br />
+      <span class="event_name">#{event.name}</span>
+    </li>
+  <?r end ?>
+  </ul>
+  </div>
+<?r end ?>
+
+<?r unless @me.projects.length == 0 ?>
+  <div class="sidebar_container">
+    <h3>Current Projects</h3>
+    <ul>
+    <?r @me.projects.all({:status => 1}).each do |project| ?>
+      <li><a href="/my_account/projects/#{u(project.name)}">#{project.name}</a></li>
+    <?r end ?>
+    </ul>
+  </div>
+<?r end ?>
+
+
+</div>

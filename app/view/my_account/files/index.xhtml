@@ -1,0 +1,78 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @file.nil? 
+  if @me.uploaded_files.all.length != 0 
+    categories_all = @me.file_categories.uploaded_files.all
+    unless categories_all.length == 0
+      @me.file_categories.each do |category|
+        files = category.uploaded_files.all(:limit => 5)
+        
+        unless files.length == 0 ?>
+          <h3><a href="/my_account/files/categories/#{u(category.name)}">#{category.name}</a></h3>
+          <ul>
+          <?r files.each do |file| ?>
+            <li>
+              <div class="list_info">
+                <a href="/#{u(file.file_path)}"><strong>#{file.name}</strong></a>
+              </div>
+              <div class="list_actions">
+                <a href="/my_account/files/#{u(file.name)}/edit" class="list_item_edit" title="Edit">
+                  <span>Edit</span>
+                </a>
+                
+                <a href="#{Rs()}/#{u(file.name)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+                  <span>Delete</span>
+                </a>
+              </div>
+              <div class="clear"></div>
+            </li>
+          <?r end ?>
+          </ul>
+        <?r end ?>
+      <?r end ?>
+    <?r end ?>
+  <?r else ?>
+    <p>You have no uploaded files yet...</p>
+  <?r end ?>
+<?r else ?>
+
+  <?r if not @action.nil? and @action == :edit ?>
+
+        <form action="/my_account/files/#{u(@file.name)}/edit" method="post">
+          <ol>
+            <li>
+              <label for="name">Name*:</label>
+              <input type="text" name="name" id="name" value="#{h(@file.name)}"/>
+            </li>
+            <?r if @me.file_categories.length != 0 ?>
+            
+              <li>
+                <label for="file_category">Category:</label>
+                <select id="file_category" name="file_category">
+                  <?r @me.file_categories.each do |file_category| ?>
+                    <option value="#{file_category.file_category_id}" 
+                    <?r if(@file.file_category.file_category_id == file_category.file_category_id) ?>
+                      selected="selected"
+                    <?r end ?>
+                    >#{file_category.name}</option>
+                  <?r end ?>
+                </select>
+              </li>
+            <?r end ?>
+            <li>
+              <input type="submit" value="Edit file information" />
+            </li>
+          </ol>
+        </form>
+        
+        
+  <?r else ?>
+    <p>
+      <a href="/my_account/files/#{u(@file.name)}/edit" class="button edit">
+        <img src="/images/icons/edit.png" alt="" /><span>Edit file information</span></a>
+      </a>
+    </p>
+  <?r end ?>
+<?r end ?>

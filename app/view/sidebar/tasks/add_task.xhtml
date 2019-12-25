@@ -1,0 +1,177 @@
+<div class="sidebar_container">
+
+<?r if @where == 'project' and @project.status == 0 ?>
+  <h3>Completed Project</h3>
+  <p>You cannot add a task on a completed project</p>
+<?r else ?>
+  <script type="text/javascript">
+    <?r if @where == 'context' || @where == 'project' ?>
+      function load(selectbox, selectboxVal, rel)
+      {  
+      var y;
+          <?r if @where == 'project' ?>
+            var p = #{@project.project_id}
+            var c = #{@project.default_context.context_id}
+          <?r end ?>
+          
+          <?r if @where == 'context' ?>
+            var c = #{@context.context_id}
+          <?r end ?>
+          for (var i in rel){ 
+            for (y=0;y<rel.length;y++){
+            
+              <?r if @where == 'project' ?>
+                if (p != ""){
+                  if (selectbox.options[y] != undefined && p == selectbox.options[y].value) {
+                    selectbox.options[y].selected = true;
+                  }
+                }
+              <?r end ?>
+              
+              if (c != ""){
+                if (selectboxVal.options[y] != undefined && c == selectboxVal.options[y].value) {
+                  selectboxVal.options[y].selected = true;
+                }
+              }
+              
+            }
+          }
+      }
+    <?r end ?>
+    
+	  function addOption(selectbox, text, value) {
+		  var option = document.createElement("option");
+		  option.text = text;
+		  option.value = value;
+		  option.id = value;
+		  selectbox.options.add(option);
+	  }
+	
+
+	  function catchVal(selectbox, selectboxVal, rel) {
+	
+		  selectbox.onchange = function() { 
+			  proj_value = selectbox.options[selectbox.selectedIndex].value;
+			  for (var i in rel){
+		    		if (proj_value == i){
+         				context_value = rel[i];
+				  }			
+			  }
+		    	return selectboxVal.options[getSelectedIndex(selectboxVal, context_value)].selected = true;		
+		  };			
+	  }
+	
+	  function getSelectedIndex(selectboxVal, val) {
+		  for(var i=0; i < selectboxVal.options.length; i++) {
+			  if(selectboxVal.options[i].value == val) {
+				  return i;
+			  }
+		  }
+	  }
+
+  </script>
+  
+  <?r if @where == 'dashboard' ?>
+    <h3 class="collapsible"><a href="#" id ="toggle_quick_add_button">Add a Task</a></h3>
+    <div id ="toggle_quick_add">
+  <?r else ?>
+    <h3>Add a Task</h3>
+  <?r end ?>
+
+    <form action="/my_account/add_task" method="post" name="add_task">
+      <ol>
+        <li>
+          <label for="name">Name*:</label>
+          <input type="text" name="name" id="name" value=""/>
+        </li>
+        <li>
+          <label for="description">Description:</label>
+          <textarea name="description" id="description"></textarea>
+        </li> 
+        <li>
+          <fieldset>
+            <legend><span>Due Date: </span></legend>
+            <span><select name="deadline_month">
+            <option value="">MM</option>
+            <?r for @num in (1..12) ?>
+                <option value="#{@num}">#{@num}</option>
+            <?r end ?>
+            </select></span>
+            <span><select name="deadline_day">
+            <option value="">DD</option>
+            <?r for @num in (1..31) ?>
+                <option value="#{@num}">#{@num}</option>
+            <?r end ?>
+            </select></span>
+            
+            <span><select name="deadline_year">
+            <option value="">YYYY</option>
+            <?r @date = Date.today ?>
+            <?r y = @date.year ?>
+            <?r y.upto(2011) do |@num| ?>
+                <option value="#{@num}">#{@num}</option>
+            <?r end ?>
+            </select></span>
+          </fieldset>
+        </li>
+        
+        <?r unless @me.projects.length == 0 ?>
+          <li>
+            <label for="project">Project:</label>
+            <select id="project" name="project">           
+              <option value="" selected="selected">Choose Project..</option>
+            </select>
+          </li>
+        <?r end ?>
+        
+
+
+        <li>
+          <label for="context">Context:</label>
+          <select id="context" name="context">
+          </select>
+        </li>
+
+        <li>
+          <input type="submit" value="Add Task" />
+        </li>
+      </ol>
+    </form>
+    
+  <?r if @where == 'dashboard' ?>
+  </div>
+  <?r end ?>
+  
+	  <script type="text/javascript">
+		  var p = new Array();
+		  var c = new Array();
+		  var pc = new Array();
+		
+      <?r @me.projects.all(:status => 1).each do |project| ?>
+		    p["#{project.name}"] = "#{project.project_id}";
+      <?r end ?>
+              		
+      <?r @me.contexts.each do |context| ?>
+		    c["#{context.name}"] = "#{context.context_id}";
+      <?r end ?>
+      
+      <?r @me.projects.all(:status => 1).each do |project| ?>
+		    pc["#{project.project_id}"] = "#{project.default_context.context_id}";
+      <?r end ?>
+      
+		  for (var i in p){
+			  addOption(document.add_task.project, i, p[i]);
+		  }
+		  for (var i in c){
+			  addOption(document.add_task.context, i, c[i]);
+		  }		
+		
+		  catchVal(document.add_task.project, document.add_task.context, pc);		
+		  <?r if @where == 'context' || @where == 'project' ?>
+		    load(document.add_task.project, document.add_task.context, pc);	
+		  <?r end ?>	
+	  </script>
+<?r end ?>
+</div>
+
+

@@ -1,0 +1,36 @@
+<div class="sidebar_container">
+  <h3>Search by Username</h3>
+  <form action="/search" method="post">
+    <ol>
+      <li>
+        <label for="username">Username*:</label>
+        <input type="text" name="username" id="username"/>
+      </li>
+      <li>
+        <input type="hidden" name="search_type" value="username" />
+        <input type="submit" value="Search" />
+      </li>
+    </ol>
+  </form>
+</div>
+
+<div class="sidebar_container">
+  <h3>Search by Name</h3>
+  <form action="/search" method="post">
+    <ol>
+      <li>
+        <label for="first_name">First Name*:</label>
+        <input type="text" name="first_name" id="first_name"/>
+      </li>
+      <li>
+        <label for="last_name">Last Name*:</label>
+        <input type="text" name="last_name" id="last_name"/>
+      </li>
+      <li>
+        <input type="hidden" name="search_type" value="name" />
+        <input type="submit" value="Search" />
+      </li>
+    </ol>
+  </form>
+</div>
+

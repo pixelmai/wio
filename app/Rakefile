@@ -1,0 +1,54 @@
+require 'rubygems'
+require 'ramaze'
+acquire __DIR__/:config/'*'
+current_dir = __DIR__
+
+namespace :model do
+  
+  desc 'Runs auto_upgrade! on all models'
+  task :upgrade do
+    acquire current_dir/:model/'*'
+    DataMapper.auto_upgrade!
+  end
+  
+  desc 'Runs auto_migrate! on all models'
+  task :migrate do
+    acquire current_dir/:model/'*'
+    DataMapper.auto_migrate!
+  end
+  
+  desc 'Creates an admin account if it doesn\'t exist yet'
+  task :create_admin => :upgrade do
+    create_user({
+      :username => 'admin',
+      :password => 'admin',
+      :password_confirmation => 'admin',
+      :email_address => 'admin@wio.com',
+    })
+  end
+  
+  desc 'Creates a dummy account with username "wio" and password "wio"'
+  task :create_dummy_account => :upgrade do
+    create_user({
+      :username => 'wio',
+      :password => 'wio',
+      :password_confirmation => 'wio',
+      :email_address => 'wio@wio.com',
+    })
+  end
+
+  
+  def create_user hash
+    if User.get(hash[:username]).nil?
+      user = User.new(hash)
+      if user.save
+        puts user.username.capitalize + " account created."
+      else
+        puts "There were some problems..."
+        puts user.errors.full_messages
+      end
+    else
+      puts hash[:username].capitalize +  " account already exists."
+    end
+  end
+end

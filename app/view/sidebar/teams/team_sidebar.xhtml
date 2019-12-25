@@ -1,0 +1,73 @@
+<?r if @action == :edit or @action == :invite ?>
+  <div class="sidebar_container">
+    <h3>Related Tasks</h3>
+    <ul>
+      <?r if @where == :search_results ?>    
+        <li>
+          <a href="/teams/#{u(@team.name)}/invite_members">Search Again</a>
+        </li>
+      <?r end ?>
+      
+      <li>
+        <a href="/teams/#{u(@team.name)}">Back to #{@team.name}'s Page</a>
+      </li>
+    </ul>
+  </div>
+  
+  <?r if @me.teams.length != 0 ?>
+    <div class="sidebar_container">
+      <h3>My other Teams</h3>
+      <ul>
+        <?r @me.teams.all(:limit=>5).each do |team| ?>
+          <?r unless @team.name == team.name ?>
+            <li>
+                <a href="/teams/#{u(team.name)}">#{team.name}</a>
+            </li>
+          <?r end ?>
+        <?r end ?>
+      </ul>
+    </div>
+  <?r else ?>
+    <p>You have no teams created yet...</p>
+  <?r end ?>
+   
+<?r elsif @action == :members ?>
+  <div class="sidebar_container">
+    <h3>Related Tasks</h3>
+    <ul>    
+      <li>
+        <a href="/teams/#{u(@team.name)}">Back to #{@team.name}'s Page</a>
+      </li>
+    </ul>
+  </div>
+  
+<?r elsif @action == 'view' ?>
+
+  <?r if not session[:username].nil? and (@team.members.include? @me) ?>
+    #{render_fragment 'sidebar/teams/add_task.xhtml'}
+  <?r end ?>
+  
+  <div class="sidebar_container">
+    <h3>Team Members</h3>
+    <ul>
+    <?r @team.members.all({:limit=>5}).each do |member| ?>
+      <li><a href="/people/#{u(member.username)}">#{member.username}</a></li>
+    <?r end ?>
+    </ul>
+    <?r if @team.members.all.length > 5 ?>
+      <a href="/teams/#{u(@team.name)}/members" class="view_all">View all</a>
+    <?r end ?>
+  </div>
+  
+  <?r unless @team.projects.length == 0 ?>
+    <div class="sidebar_container">
+      <h3>Current Projects</h3>
+      <ul>
+      <?r @team.projects.all({:status => 1}).each do |project| ?>
+        <li><a href="/teams/#{u(@team.name)}/projects/#{u(project.name)}">#{project.name}</a></li>
+      <?r end ?>
+      </ul>
+    </div>
+  <?r end ?>
+  
+<?r end ?>

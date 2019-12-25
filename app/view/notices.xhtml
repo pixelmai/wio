@@ -1,0 +1,43 @@
+<!-- Notifications -->
+<div id="all_notifications">
+  <?r unless flash[:error].nil? ?>
+   <div id="error">
+      <?r if (flash[:error].is_a? String or flash[:error].length == 1) ?>
+        <p>
+          #{flash[:error]}
+        </p>
+      <?r else ?>
+        <ul>
+          <?r flash[:error].each do |e| ?>
+            <li>#{e}</li>
+          <?r end ?>
+        </ul>
+      <?r end ?>
+    </div>
+  <?r 
+      flash[:error] = nil
+    end
+  ?>
+
+  <?r unless flash[:confirm].nil? ?>
+    <div id="confirm">
+      <p>
+        #{flash[:confirm]}
+      </p>
+    </div>
+  <?r 
+      flash[:confirm] = nil
+    end
+  ?>
+  
+  <?r unless flash[:notice].nil? ?>
+    <div id="notice">
+      <p>
+        #{flash[:notice]}
+      </p>
+    </div>
+  <?r 
+      flash[:notice] = nil
+    end
+  ?>
+</div>

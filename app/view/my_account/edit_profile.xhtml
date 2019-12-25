@@ -1,0 +1,78 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+#{@account_form}
+
+  <form action="/my_account/edit_profile" method="post">
+    <ol>
+      <li>
+        <label for="last_name">Last Name*:</label>
+        <input type="text" name="last_name" id="last_name" value="#{@me.last_name}"/>
+      </li>
+      <li>
+        <label for="first_name">First Name*:</label>
+        <input type="text" name="first_name" id="first_name" value="#{@me.first_name}" />
+      </li>
+      <li>
+        <label for="middle_name">Middle Name*:</label>
+        <input type="text" name="middle_name" id="middle_name" value="#{@me.middle_name}" />
+      </li>
+      <li>
+        <label for="address">Address:</label><br />
+        <textarea id="address" name="address">#{@me.address}</textarea>
+      </li>
+      <li>
+        <legend><span><strong>Birth Date: </strong></span></legend>
+        <span><select name="Birth_Date_year">
+        <option value="">YYYY</option>
+        <?r 
+          unless @me.birth_date.nil?
+            @bday = @me.birth_date
+            y = @bday.year
+            m = @bday.month
+            d = @bday.day 
+          end
+          2000.downto(1945) do |@num|
+            if  y == @num ?>
+              <option value="#{@num}" selected="selected">#{@num}</option>
+        <?r else ?>
+              <option value="#{@num}">#{@num}</option>
+        <?r end
+          end ?>
+        </select></span>
+        <span><select name="Birth_Date_month">
+        <option value="">MM</option>
+        <?r for @num in (1..12)
+              if m == @num ?>
+                <option value="#{@num}" selected="selected">#{@num}</option>
+          <?r else ?>
+            <option value="#{@num}">#{@num}</option>
+          <?r  end 
+            end ?>
+        </select></span>
+        <span><select name="Birth_Date_day">
+        <option value="">DD</option>
+        <?r for @num in (1..31)
+              if  d == @num ?>
+                <option value="#{@num}" selected="selected">#{@num}</option>
+          <?r else ?>
+            <option value="#{@num}">#{@num}</option>
+          <?r end 
+            end ?>
+        </select></span>
+
+      </li>
+      <li>
+        <label for="home_phone_number">Home Phone Number:</label>
+        <input type="text" name="home_phone_number" id="home_phone_number" value="#{@me.home_phone_number}" />
+      </li>
+      <li>
+        <label for="work_phone_number">Work Phone Number:</label>
+        <input type="text" name="work_phone_number" id="work_phone_number" value="#{@me.work_phone_number}" />
+      </li>
+      <li>
+        <input type="submit" value="Edit Account Information" />
+      </li>
+    </ol>
+  </form>

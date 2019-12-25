@@ -1,0 +1,15 @@
+===================================
+TASKS
+===================================
+
+** Added status to the task model. Need to coded.
+** Create a checkbox that will automatically set a task to "completed".
+** Ordering of Data by date... for duedates of tasks.
+** Listing of UNFINISHED tasks...
+-- URL encode task names when using ajax feature for incomplete and complete
+-- JSON
+-- Fix possible name collisions in tasks, projects, etc.
+-- Removing of header CONTEXT in dashboard, when all tasks in the context is completed.
+-- Validation of dates in tasks. Must not add, edit a task with a date before "today".
+-- Display a message in the task list <ul> if there no tasks to display (ex. all completed)
+-- Accepting of tasks now alerts the task_id, due to the edit of URLS 

@@ -1,0 +1,61 @@
+<?r unless session[:username].nil? and not session[:logged_in] 
+  if @main_location == 'Dashboard' 
+    locations = [
+      {:name => 'Home', :url => '/dashboard'},
+      {:name => 'Profile', :url => '/my_account'},
+      {:name => 'Contexts', :url => '/my_account/contexts'},
+      {:name => 'Projects', :url => '/my_account/projects'},
+      {:name => 'Tasks', :url => '/my_account/tasks'},
+      {:name => 'Teams', :url => '/my_account/teams'},
+      {:name => 'Contacts', :url => '/my_account/contacts'},
+      {:name => 'Requests', :url => '/my_account/requests'},
+      {:name => 'Calendar', :url => '/my_account/calendar'},
+      {:name => 'Files', :url => '/my_account/files'},
+      {:name => 'Messages', :url => '/my_account/messages'}
+    ]
+    
+  elsif @team and @main_location == @team.name 
+   
+    locations = [
+      {:name => 'Home', :url => '/teams/'+u(@team.name)},
+      {:name => 'Members', :url => '/teams/'+u(@team.name)+'/members'}
+    ]
+    
+    if @team.members.include? @me     
+        locations.insert(1, {:name => 'Tasks', :url => '/teams/'+u(@team.name)+'/tasks'})
+        locations.insert(2, {:name => 'Projects', :url => '/teams/'+u(@team.name)+'/projects'})
+        locations.insert(3, {:name => 'Files', :url => '/teams/'+u(@team.name)+'/files'})
+        locations.insert(4, {:name => 'Discussion Board', :url => '/teams/board/'+u(@team.name)})
+    end  
+    
+    if @team.team_lead == @me     
+        locations.insert(5, {:name => 'Invite', :url => '/teams/'+u(@team.name)+'/invite_members'})
+    end 
+  
+  elsif @main_location == 'Admin Panel'
+    locations = [
+      {:name => 'Home', :url => '/admin'},
+      {:name => 'People', :url => '/admin/people'},
+      {:name => 'Teams', :url => '/admin/teams'}
+    ]
+  end
+   
+   if locations
+    links = '';
+    locations.each do |link|
+      o = {:href => link[:url],
+      :contents => Wio::Helper::Html.element(:span, {:class=> 'link_text', :contents => link[:name]}) + Wio::Helper::Html.element(:div, {:contents => Wio::Helper::Html.element(:span), :class => 'arrow' })};
+      #:contents => link[:name]};
+      o[:class] = 'active' if sub_location == link[:name]
+      links << Wio::Helper::Html.element(:a, o)
+    end
+   end
+  ?>
+      
+    <div id="sub_navigation">
+      <div id="sub_navigation_container">
+        #{links}
+        <div class="clear"></div>
+      </div>
+    </div>
+<?r end ?>

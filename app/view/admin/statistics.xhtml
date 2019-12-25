@@ -1,0 +1,41 @@
+<?r 
+  areas = [
+    {:caption => 'Users', :model => User},
+    {:caption => 'Contexts', :model => Context},
+    {:caption => 'Tasks', :model => Task},
+    {:caption => 'Events', :model => CalendarEvent},
+    {:caption => 'Files', :model => UploadedFile},
+    {:caption => 'Teams', :model => Team},
+    {:caption => 'Board Topics', :model => DiscussionBoardTopic},
+    {:caption => 'Board Posts', :model => DiscussionBoardPost}
+  ]
+  @all_users = User.all(:logged_in=>true)
+  @ol_users = User.all(:logged_in=>true, :limit=>5, :order=>[:updated_at.desc])
+?>
+
+
+<div class="sidebar_container">
+  <h3>WIO Statistics</h3>
+  <ul>
+  <?r areas.each do |stat| 
+    count = stat[:model].all.length ?>
+    <li>
+      <strong>Total #{stat[:caption]}:</strong> <span>#{count}</span>
+    </li>
+  
+  <?r end ?>
+  </ul>
+</div>
+
+<?r if @ol_users.length != 0 ?>
+  <div class="sidebar_container">
+    <h3>Online Users (#{@all_users.count})</h3>
+    <ul>
+    <?r @ol_users.each do |user| ?>
+      <li>
+        <a href="/people/#{user.username}">#{user.username}</a>
+      </li>
+    <?r end ?>
+    </ul>
+  </div>
+<?r end ?>

@@ -1,0 +1,10 @@
+NOKIA 3310
+ - Set the connection to "m2bus" in your .gnokiirc file as in:
+ connection = m2bus
+
+GETTING MESSAGES FROM SIM
+ - --getsms SM <start>
+   where start is the index??? number of the message
+
+TRYING SMSD
+  http://wiki.gnokii.org/index.php/Smsd

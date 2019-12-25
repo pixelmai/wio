@@ -1,0 +1,21 @@
+<div class="sidebar_container">
+<h3>Related Tasks</h3>
+<ul>
+  <li><a href="/my_account/calendar">Back to Calendar</a></li>
+</ul>
+</div>
+  
+<?r calendar = @me.calendar
+  @events = calendar.calendar_events.all({:start_date.gte => Date.today, :order => [:start_date.asc], :limit => 5})
+?>
+
+<?r unless @events.length == 0 ?>
+  <div class="sidebar_container">
+  <h3>Upcoming Events</h3>
+  <ul>
+  <?r @events.each do |event| ?>
+    <li><strong>#{event.name}</strong></li>
+  <?r end ?>
+  </ul>
+  </div>
+<?r end ?>

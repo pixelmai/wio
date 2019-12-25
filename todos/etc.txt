@@ -1,0 +1,14 @@
+===================================
+MISCELLANEOUS STUFF
+===================================
+
+-- Saving NULL values into database, like dates in birthdates and duedates.
+   Just in case the user wants to change the duedate into "none"
+** nltobr equivalent in ruby
+** Change the showing of duedate into number of days left. DateTime - Time.now
+** Getting the referrer ANSWER: request.http_vars['HTTP_REFERER']
+   Like deleting a task in the dashboard will redirect back to the dashboard.
+-- Pagination for listing of Users of WIO and other stuff.
+** Including a "sidebar template" on page.xhtml
+-- Searching that will not match the word. Like 'char' may show results like 'charlotte'
+-- Paginator options doesn't work.

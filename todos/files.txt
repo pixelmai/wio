@@ -1,0 +1,6 @@
+===================================
+FILES
+===================================
+
+-- Limiting of files to be listed in the files page
+   per category becomes the limit for all of the files

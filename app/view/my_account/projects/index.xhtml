@@ -1,0 +1,166 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+<?r if @project.nil? ?>
+
+  <?r 
+    active_projects = @me.projects.all({:status => 1})
+    unless active_projects.length == 0 ?>
+    <h3>Active Projects</h3>
+    <ul>
+    <?r active_projects.each do |project| ?>
+      <li>
+      <div class="list_info">
+        <a href="/my_account/projects/#{u(project.name)}"><strong>#{project.name}</strong></a>
+        <em>(<a href="/my_account/contexts/#{u(project.default_context.name)}">#{project.default_context.name unless project.default_context.nil?}</a>)</em>
+      </div>
+      <div class="list_actions">
+        <a href="/my_account/projects/#{u(project.name)}/edit" class="list_item_edit" title="Edit">
+          <span>Edit</span>
+        </a>
+        <a href="#{Rs()}/#{u(project.name)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+          <span>Delete</span>
+        </a>
+      </div>
+      <div class="clear"></div>
+      </li>
+    <?r end ?>
+    </ul>
+    
+    
+    <?r 
+      completed_projects = @me.projects.all({:status => 0})
+      unless completed_projects.length == 0 ?>
+      <h3>Completed Projects</h3>
+      <ul>
+        <?r completed_projects.each do |project| ?>
+          <li>
+          <div class="list_info">
+            <a href="/my_account/projects/#{u(project.name)}"><strong>#{project.name}</strong></a>
+            <em>(<a href="/my_account/contexts/#{u(project.default_context.name)}">#{project.default_context.name unless project.default_context.nil?}</a>)</em>
+          </div>
+          <div class="list_actions">
+            <a href="/my_account/projects/#{u(project.name)}/edit" class="list_item_edit" title="Edit">
+              <span>Edit</span>
+            </a>
+            <a href="#{Rs()}/#{u(project.name)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+              <span>Delete</span>
+            </a>
+          </div>
+          <div class="clear"></div>
+          </li>
+        <?r end ?>
+      <?r end ?>
+  <?r else ?>
+    <p> You have no projects created yet.</p>
+  <?r end ?>
+
+<?r else ?>
+  
+  <?r if not @action.nil? and @action == :edit ?>
+
+        <form action="/my_account/projects/#{u(@project.name)}/edit" method="post">
+          <ol>
+            <li>
+              <label for="name">Name*:</label>
+              <input type="text" name="name" id="name" value="#{h(@project.name)}"/>
+            </li>
+            <li>
+              <label for="description">Description:</label><br />
+              <textarea name="description" id="description">#{h(@project.description)}</textarea>
+            </li>
+            <li>
+              <label for="status">Status:</label>
+              <input id="active" type="radio" name="status" value="1"
+              <?r if(@project.status == 1) ?>
+                checked="checked"
+              <?r end ?> 
+              />
+              <label for="active">Active</label>
+              <input id="completed" type="radio" name="status" value="0"
+              <?r if(@project.status == 0) ?>
+                checked="checked"
+              <?r end ?> 
+              />
+              <label for="completed">Completed</label>
+            </li>   
+            <li>
+            <label for="default_context">Default Context:</label>
+              <select id="default_context" name="default_context">
+                <?r @me.contexts.each do |context| ?>
+                  <option value="#{context.context_id}"
+                    <?r if(context == @project.default_context) ?>
+                      selected="selected"
+                    <?r end ?>
+                  >#{context.name}</option>
+                <?r end ?>
+              </select>
+            </li>
+            <li>
+              <input type="submit" value="Edit Project" />
+            </li>
+          </ol>
+        </form>
+        
+        
+  <?r else ?>
+
+    <?r
+      project_tasks = 
+      @project.tasks.all({
+        :completed => false, :deadline.not => nil,
+        :order => [:deadline.asc]
+      }).concat(@project.tasks.all({
+        :completed => false,:deadline => nil
+      }))
+      
+      completed_project_tasks = @project.tasks.all({:completed => true, :order => [:date_completed.desc], :limit=>5}) ?>
+      <?r if project_tasks.empty? and completed_project_tasks.empty? ?>
+        <p> No tasks for this project yet....
+      <?r else ?>
+        <div id="incomplete_tasks">
+        <h3>Active Tasks</h3>
+        #{render_fragment 'my_account/tasks/list.xhtml', {:tasks => project_tasks}}
+        </div>
+        <div id="completed_tasks">
+        <h3>Completed Tasks</h3>
+        #{render_fragment 'my_account/tasks/list.xhtml', {:tasks => completed_project_tasks}}
+        </div>
+      <?r end ?>
+
+    
+    <h4>Project's Information</h4>
+    <p>
+    <strong>Status: </strong>
+    <?r
+    
+    case @project.status
+      when 1
+        status = "Active"
+      when 0
+        status = "Completed"
+    end
+    
+    ?>
+    
+    #{status}<br />
+    <?r unless @project.default_context.nil? ?>
+      <strong>Default Context: </strong>#{@project.default_context.name}<br />
+    <?r end ?>
+    
+    <?r unless @project.description.nil? ?>
+      <strong>Description:</strong><br />
+      #{nl2br(@project.description)}<br />
+    <?r end ?>
+    </p>
+
+    <p>
+      <a href="/my_account/projects/#{u(@project.name)}/edit" class="button edit">
+        <img src="/images/icons/edit.png" alt="" /><span>Edit project</span></a>
+      </a>
+    </p>
+    
+    
+  <?r end ?>
+  
+<?r end ?>

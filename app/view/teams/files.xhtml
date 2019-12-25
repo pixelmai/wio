@@ -1,0 +1,45 @@
+<?r if @file.nil? 
+  files = @team.uploaded_files.all
+
+  if files.length != 0 
+  ?> 
+    <ul>
+    <?r files.each do |file| ?>
+      <li>
+        <div class="list_info">
+          <a href="/#{u(file.file_path)}"><strong>#{file.name}</strong></a>
+          <em>(<a href="/people/#{file.team_creator}">#{file.team_creator}</a>)</em>
+        </div>
+        <div class="list_actions">
+          <?r if @team.team_lead == @me ?>
+            <a href="/teams/#{@team.name}/files/#{u(file.name)}?do=edit" class="list_item_edit" title="Edit">
+              <span>Edit</span>
+            </a>
+            
+            <a href="/teams/#{@team.name}/files/#{u(file.name)}?do=delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+              <span>Delete</span>
+            </a>
+          <?r end ?>
+        </div>
+        <div class="clear"></div>
+      </li>
+    <?r end ?>
+    </ul>
+  <?r else ?>
+    <p>You have no uploaded files yet...</p>
+  <?r end ?>
+<?r else ?>
+  <?r if not @action.nil? and @file_action == :edit_file ?>
+    <form action="/teams/#{@team.name}/files/#{u(@file.name)}?do=edit" method="post">
+      <ol>
+        <li>
+          <label for="name">Name*:</label>
+          <input type="text" name="name" id="name" value="#{h(@file.name)}"/>
+        </li>
+        <li>
+          <input type="submit" value="Edit file information" />
+        </li>
+      </ol>
+    </form>
+  <?r end ?>
+<?r end ?>

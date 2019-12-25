@@ -1,0 +1,54 @@
+<ul class="tasks">
+  <?r unless tasks.length == 0 ?>
+    <?r tasks.each do |task| ?>
+      <li id="task_#{task.task_id}" 
+        <?r if task.overdue? and task.progress != 100 ?>class="overdue"<?r end ?>
+      >
+        <div class="list_info">
+          <input type="checkbox" <?r if task.completed? ?>checked="checked"<?r end ?> 
+            name="completed" value="#{u(task.name)}" />     
+             
+          <?r if task.deadline ?>
+            <?r if task.overdue? and task.completed == false ?>
+              Overdue by #{task.days_overdue} <?r if task.days_overdue > 1 ?>days<?r else ?>day<?r end ?>
+            <?r elsif task.days_countdown == 0 and task.completed == false ?>
+              Due Today
+            <?r else ?>
+              <?r if task.completed == false ?>
+                Due in #{task.days_countdown} <?r if task.days_countdown > 1 ?>days<?r else ?>day<?r end ?>
+              <?r end ?>
+            <?r end ?>
+          <?r end ?>   
+         
+          <?r if task.completed == true ?>
+            #{task.date_completed.strftime('%m/%d/%Y')}
+          <?r end ?>
+           
+          <a href="/my_account/tasks/#{u(task.name)}"><strong>#{task.name}</strong></a>
+          <?r unless @where == 'context' ?>
+            <em>(<a href="/my_account/contexts/#{u(task.context.name)}">#{task.context.name unless task.context.nil?}</a>)</em>
+          <?r end ?>
+          <?r unless task.project.nil? ?>
+            <?r unless @where == 'project' ?>
+              <a href="/my_account/projects/#{u(task.project.name)}" title="#{task.project.name}">[P]</a>
+            <?r end ?>
+          <?r end ?>
+        </div>
+        
+        <div class="list_actions">
+          <a href="/my_account/tasks/#{u(task.name)}/edit" class="list_item_edit" title="Edit">
+            <span>Edit</span>
+          </a>
+          <a href="#{Rs()}/#{u(task.name)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+            <span>Delete</span>
+          </a>  
+        </div>
+        <div class="clear"></div>
+        
+        
+        <!-- onclick="$.get('#{Rs()}/#{u(task.name)}/completed', {},
+              function(){alert('#{u(task.name)} is completed')}" -->
+      </li>
+    <?r end ?>
+  <?r end ?>
+</ul>

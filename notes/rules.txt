@@ -1,0 +1,4 @@
+TASKS
+- A user automatically has a default context 'uncategorized'
+- The uncategorized context cannot be deleted or modified
+- Assigned tasks automatically goes to uncategorized context

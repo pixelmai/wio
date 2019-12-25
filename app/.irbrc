@@ -1,0 +1,1 @@
+require 'ramaze-irb.rb'

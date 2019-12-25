@@ -1,0 +1,9 @@
+<?r unless @me.contexts.length == 0 ?>
+  <div class="sidebar_container">
+  <h3>My other contexts</h3>
+  <ul>
+  <?r @me.contexts.all.each do |context| ?>
+    <li><a href="/my_account/contexts/#{u(context.name)}">#{context.name}</a></li>
+  <?r end ?>
+  </ul>
+<?r end ?>

@@ -1,0 +1,5 @@
+===================================
+CALENDAR AND EVENTS
+===================================
+
+** user at signup will automatically have a calendar

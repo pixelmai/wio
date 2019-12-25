@@ -1,0 +1,14 @@
+===================================
+TEAMS
+===================================
+
+** Deleting a team will also delete the members in it.
+** Creating a "Teams" Main Page.
+** Removing membership from team
+-- Saving a Team without supplying a name results to a double error
+   stating "Name must not be blank"
+** Team Members Page
+-- Team Tasks NEW!
+-- Team Projects NEW!
+** Team Discussion Board
+-- Team Files (seems to be similar with the tasks) NEW!

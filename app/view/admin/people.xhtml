@@ -1,0 +1,67 @@
+<?r if @action && @action == 'send_notice' ?>
+  <h2>#{h(@title)}</h2>
+  <form action="/admin/people/#{u(@user.username)}/send_notice" method="post">
+    <ol>
+      <li>
+        <label for="for">For:</label> #{@user.username}
+        <input type="hidden" name="for" id="for" value="#{h(@user.username)}" />
+      </li>
+      <li>
+        <label for="subject">Subject:</label><br />
+        <input type="text" name="subject" id="subject" value="NOTICE: " />
+      </li>
+      <li>
+        <label for="content">Content:</label><br />
+        <textarea name="content" id="content"></textarea>
+      </li>
+      <li>
+        <input type="submit" value="Send Message" />
+      </li>
+    </ol>
+  </form>
+  
+<?r else ?>
+
+  <h2>Manage WIO Users</h2>
+  #{render_fragment 'notices.xhtml'}
+  <?r unless @all_users.nil? ?>
+    
+    <ul id="people_list">
+    
+      <?r @all_users.each do |user| 
+        if user.last_name
+          user.last_name = user.last_name.to_s[0,1]
+        end
+        ?>
+        <?r unless user.username == 'admin' ?>
+          <li>
+            <div class="list_info">
+              <a href="/people/#{user.username}">#{user.username}</a> 
+              <?r if user.last_name ?>
+                - <em>#{user.first_name} #{user.last_name}.</em>
+              <?r end ?>
+            </div>
+            
+            <div class="list_actions">
+            <?r if user.banned == true ?>
+              <a href="/admin/people/#{user.username}/un_ban">Un-ban User</a>
+            <?r else ?>
+              <a href="/admin/people/#{user.username}/ban">Ban User</a> 
+            <?r end ?>
+            |
+            <a href="/admin/people/#{user.username}/send_notice">Send Notice</a>
+            </div>
+           
+            <div class="clear"></div>
+          </li>
+        <?r end ?>
+      <?r end ?>
+    </ul>
+    <div class="pagination">
+      #{@page.navigation}
+    </div>
+  <?r else ?>
+    <p>No users registered yet...</p>
+  <?r end ?>
+ 
+<?r end ?>

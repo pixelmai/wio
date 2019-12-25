@@ -1,0 +1,34 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @event.nil? ?>
+<h3>Active Events</h3>
+  <?r
+    calendar = @me.calendar
+    events = calendar.calendar_events.all({:start_date.gte => Date.today, :order => [:start_date.asc]})
+      
+  ?>
+  <?r if events.empty? ?>
+    <p> You have no events yet.</p>
+  <?r else ?>
+    <div id="events">
+    #{render_fragment 'my_account/calendar/list.xhtml', {:events => events}}
+    </div>
+  <?r end ?>
+  
+<h3>Past Events</h3>
+  <?r
+    calendar = @me.calendar
+    events_old = calendar.calendar_events.all({:start_date.lt => Date.today, :order => [:start_date.desc], :limit => 5, :order => [:start_date.desc]})
+      
+  ?>
+  <?r if events_old.empty? ?>
+    <p> You have no past events yet.</p>
+  <?r else ?>
+    <div id="events">
+    #{render_fragment 'my_account/calendar/list.xhtml', {:events => events_old}}
+    </div>
+  <?r end ?>
+
+<?r end ?>

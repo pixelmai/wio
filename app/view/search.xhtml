@@ -1,0 +1,29 @@
+<h2>Search Results</h2>
+<p><strong>#{@title}</strong></p>
+<?r if @search_type == 'username' or @search_type == 'name' ?>
+  <?r if @search_results.length != 0 ?>
+    <ul>
+      <?r @search_results.each do |user| ?>
+        <li><a href="/people/#{u(user.username)}">#{user.username}</a>
+          <?r if user.last_name ?>
+            - <em>#{user.first_name} #{user.last_name.to_s[0,1]}.</em>
+          <?r end ?>
+        </li>
+      <?r end ?>
+    </ul>
+  <?r else ?>
+    <p>The user you are searching for doesn't exist.</p>
+  <?r end ?>
+<?r elsif @search_type == 'team' ?>
+  <?r if @search_results.length != 0 ?>
+    <ul>
+      <?r @search_results.each do |team| ?>
+        <li><a href="/teams/#{u(team.name)}">#{team.name}</a></li>
+      <?r end ?>
+    </ul>
+  <?r else ?>
+    <p>The team you are searching for doesn't exist.</p>
+  <?r end ?>
+<?r end ?>
+
+

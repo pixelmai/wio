@@ -1,0 +1,91 @@
+<div class="sidebar_container">
+  <h3>Add an Event</h3>
+
+  <form action="/my_account/add_event" method="post">
+    <ol>
+      <li>
+        <label for="name">Name*:</label>
+        <input type="text" name="name" id="name" value=""/>
+      </li>
+      <li>
+        <fieldset>
+          <legend><span>Start Date: </span></legend>
+          <span><select name="start_date_month">
+          <option value="">MM</option>
+          <?r for @num in (1..12) ?>
+              <option value="#{@num}">#{@num}</option>
+          <?r end ?>
+          </select></span>
+          <span><select name="start_date_day">
+          <option value="">DD</option>
+          <?r for @num in (1..31) ?>
+              <option value="#{@num}">#{@num}</option>
+          <?r end ?>
+          </select></span>
+          
+          <span><select name="start_date_year">
+          <option value="">YYYY</option>
+          <?r y = Date.today.year ?>
+          <?r y.upto(2011) do |@num| ?>
+              <option value="#{@num}">#{@num}</option>
+          <?r end ?>
+          </select></span>
+        </fieldset>
+      </li>
+      
+      <li>
+        <label for="notify">Notify:</label>
+        <label class="fornotification" for="notify_month">Date:</label>
+        <span><select name="notify_month" id="notify_month">
+        <option value="">MM</option>
+        <?r
+          # # #
+          
+          for @num in (1..12) ?>
+            <option value="#{@num}"
+            >#{@num}</option>
+        <?r end ?>
+        </select></span>
+        <span><select name="notify_day" id="notify_day">
+        <option value="">DD</option>
+        <?r for @num in (1..31) ?>
+            <option value="#{@num}"
+            >#{@num}</option>
+        <?r end ?>
+        </select></span>
+        
+        <span><select name="notify_year" id="notify_year">
+        <option value="">YYYY</option>
+        <?r current_year = DateTime.now.year ?>
+        <?r current_year.upto(current_year + 4) do |@num| ?>
+            <option value="#{@num}"
+            >#{@num}</option>
+        <?r end ?>
+        </select></span>
+        <br />
+        <label class="fornotification">Time:</label>
+         <span><select name="notify_hour" id="notify_hour">
+        <option value="">HH</option>
+        <?r 0.upto(23) do |@num| ?>
+            <option value="#{@num}"
+            >#{@num}</option>
+        <?r end ?>
+        </select></span>
+        :
+        <span><select name="notify_minute" id="notify_minute">
+        <option value="">MM</option>
+        <?r 0.upto(59) do |@num| ?>
+            <option value="#{@num}"
+            >#{(@num > 9) ? @num.to_s : ('0'+@num.to_s)}</option>
+        <?r end ?>
+        </select></span>
+        
+        </select></span>
+      </li>
+      
+      <li>
+        <input type="submit" value="Add Event" />
+      </li>
+    </ol>
+  </form>
+</div>

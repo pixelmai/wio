@@ -1,0 +1,6 @@
+===================================
+DELETE CONTEXT
+===================================
+
+** by deleting a context, projects under the context will
+   automatically be set to uncategorized - DONE

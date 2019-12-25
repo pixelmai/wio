@@ -1,0 +1,78 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @context.nil? ?>
+
+  <ul>
+  <?r @me.contexts.each do |context| ?>
+    <li>
+      <div class="list_info">
+        <a href="/my_account/contexts/#{u(context.name)}"><strong>#{context.name}</strong></a>
+      </div>
+      <div class="list_actions">
+        <?r unless context.name == 'uncategorized' ?> 
+          <a href="/my_account/contexts/#{u(context.name)}/edit" class="list_item_edit" title="Edit">
+            <span>Edit</span>
+          </a>
+          
+          <a href="#{Rs()}/#{u(context.name)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+            <span>Delete</span>
+          </a>
+        <?r end ?>
+      </div>
+      <div class="clear"></div>
+    </li>
+  <?r end ?>
+  </ul>
+
+
+<?r else ?>
+  
+
+  
+  <?r if not @action.nil? and @action == :edit ?>
+
+        <form action="/my_account/contexts/#{u(@context.name)}/edit" method="post">
+          <ol>
+            <li>
+              <label for="name">Name*:</label>
+              <input type="text" name="name" id="name" value="#{h(@context.name)}"/>
+            </li>
+            <li>
+              <input type="submit" value="Edit Context" />
+            </li>
+          </ol>
+        </form>
+        
+        
+  <?r else ?>
+    <?r
+      context_tasks = 
+      @context.tasks.all({
+        :completed => false, :deadline.not => nil,
+        :order => [:deadline.asc]
+      }).concat(@context.tasks.all({
+        :completed => false,:deadline => nil
+      }))
+      
+      completed_context_tasks = @context.tasks.all({:completed => true, :order => [:date_completed.desc], :limit => 5}) ?>
+      <?r if context_tasks.empty? and completed_context_tasks.empty? ?>
+        <p> No tasks for this context yet....</p>
+      <?r else ?>
+        <div id="incomplete_tasks">
+        <h3>Active Tasks</h3>
+        #{render_fragment 'my_account/tasks/list.xhtml', {:tasks => context_tasks}}
+        </div>
+        <div id="completed_tasks">
+        <h3>Completed Tasks</h3>
+        #{render_fragment 'my_account/tasks/list.xhtml', {:tasks => completed_context_tasks}}
+        </div>
+      <?r end ?>
+    <p>
+      <a href="/my_account/contexts/#{u(@context.name)}/edit" class="button edit">
+        <img src="/images/icons/edit.png" alt="" /><span>Edit Context</span></a>
+      </a>
+    </p>
+  <?r end ?>
+<?r end ?>

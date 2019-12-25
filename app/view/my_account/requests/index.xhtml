@@ -1,0 +1,31 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @request.nil? ?>
+
+  <?r requests = @me.requests.latest ?>
+  
+  <?r unless requests.empty? ?>
+    <ul>
+    <?r requests.each do |request| ?>
+      <li>
+        <div class="list_info">
+          #{request.message_html}
+        </div>
+        <div class="list_actions">
+
+        </div>
+        <div class="clear"></div>
+      </li>
+    <?r end ?>
+    </ul>
+  <?r else ?>
+    <p> You have no pending requests. </p>
+  <?r end ?>
+
+<?r else ?>
+
+  <p>You have no requests yet.</p>
+
+<?r end ?>

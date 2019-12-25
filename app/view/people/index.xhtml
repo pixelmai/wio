@@ -1,0 +1,209 @@
+<!-- People -->
+
+<h2>#{@title}</h2>
+#{render_fragment 'notices.xhtml'}
+<?r if @action == 'view' ?>
+  <?r
+    unless session[:username].nil?
+      requested_contact = @user.requests.first(:type => AddContactRequest,
+        :from_username => @me.username,
+        :accepted => false,
+        :ignored => false
+      )
+      
+      contact_requests = @me.sent_requests.all(:type => AddContactRequest)
+      already_requested = contact_requests.first(:from_username => @user.username,
+        :user_username => @me.username,
+        :accepted => false,
+        :ignored => false
+      )
+    end
+  ?>
+  <ul>
+  <?r if not @user.last_name.nil? || @user.first_name.nil? || @user.middle_name.nil? 
+        @user.middle_name = @user.middle_name[0,1]
+  ?>
+    <li><strong>Name:</strong> #{@user.first_name} #{@user.middle_name}. #{@user.last_name}</li>
+  <?r end ?>
+
+  <?r if not @user.address.nil? ?>
+    <li><strong>Address:</strong> #{@user.address}</li>
+  <?r end ?>
+
+  <?r if not @user.email_address.nil? ?>
+    <li><strong>Email Address:</strong> <a href="mailto:#{@user.email_address}">#{@user.email_address}</a></li>
+  <?r end ?>
+
+  <?r if not @user.birth_date.nil? 
+    bday = @user.birth_date
+    formatted_bday = bday.strftime("%B %d, %Y")
+  ?>
+    <li><strong>Birthdate:</strong> #{formatted_bday}</a></li>
+  <?r end ?>
+
+  <?r if not @user.mobile_number.nil? ?>
+    <li><strong>Mobile Number: </strong>+#{@user.mobile_number}</li>
+  <?r end ?>
+
+  <?r if not @user.home_phone_number.nil? ?>
+    <li><strong>Home Phone Number:</strong> #{@user.home_phone_number}</a></li>
+  <?r end ?>
+
+  <?r unless @user.work_phone_number.nil? ?>
+    <li><strong>Work Phone Number:</strong> #{@user.work_phone_number}</a></li>
+  <?r end ?>
+  </ul>
+
+  <?r
+    unless session[:username].nil?
+      unless (@user.contacts.include? @me) || requested_contact || already_requested
+  ?>
+    <p><a href="/people/#{u(@user.username)}/add_contact" class="button">
+      <img src="/images/icons/contact_add.png" alt="" /><span>Add Contact</span></a>
+    </p>
+  <?r 
+      end 
+      if (@user != @me) and (@user.contacts.include? @me)
+  ?>
+    <p>
+      <a href="/people/#{u(@user.username)}/send_message" class="button">
+        <img src="/images/icons/message.png" alt="" /><span>Send Message</span>
+      </a>
+    </p>
+  <?r
+      end
+    end 
+  ?>
+<?r elsif @action == 'contacts' ?>
+  <?r if @user.contacts.length != 0 ?>
+
+    <ul>
+    <?r @user.contacts.each do |contact| ?>
+      <li>
+        <div class="list_info">
+          <a href="/people/#{u(contact.username)}"><strong>#{contact.username}</strong></a>
+        </div>
+        <div class="list_actions">
+          <!--actions here - send message or something -->
+        </div>
+        <div class="clear"></div>
+      </li>
+    <?r end ?>
+    </ul>
+
+  <?r else ?>
+
+    <p>You have no contacts yet.</p>
+
+  <?r end ?>
+  
+<?r elsif @action == 'send_message' ?>
+
+  <form action="/people/#{u(@user.username)}/send_message" method="post">
+    <ol>
+      <li>
+        <label for="for">For:</label> #{@user.username}
+        <input type="hidden" name="for" id="for" value="#{h(@user.username)}" />
+      </li>
+      <li>
+        <label for="subject">Subject:</label><br />
+        <input type="text" name="subject" id="subject" />
+      </li>
+      <li>
+        <label for="content">Content:</label><br />
+        <textarea name="content" id="content"></textarea>
+      </li>
+      <li>
+        <input type="submit" value="Send Message" />
+      </li>
+    </ol>
+  </form>
+  
+<?r elsif @action == 'teams' ?>
+  <?r if @user.teams.length != 0 ?>
+
+    <ul>
+    <?r @user.teams.each do |team| ?>
+      <li>
+        <div class="list_info">
+          <a href="/teams/#{u(team.name)}"><strong>#{team.name}</strong></a>
+        </div>
+        <div class="list_actions">
+          <!--actions here - send message or something -->
+        </div>
+        <div class="clear"></div>
+      </li>
+    <?r end ?>
+    </ul>
+
+  <?r else ?>
+
+    <p>You have no contacts yet.</p>
+
+  <?r end ?>
+<?r else ?>
+  <p>
+  Browse for your friends, officemates and schoolmates who uses WIO, and be able
+  to share tasks, events and collaborate with them easier!
+  </p>
+  
+  #{render_fragment 'notices.xhtml'}
+  
+  <?r unless @all_users.nil? ?>
+    
+    <ul id="people_list">
+    
+      <?r 
+      if session[:username]
+        contact_requests = @me.sent_requests.all(:type => AddContactRequest)
+      end
+      @all_users.each do |user| 
+        if session[:username]
+          requested_contact = contact_requests.first(:user_username => user.username, :accepted => false, :ignored => false)
+          my_contact = @me.contacts.first(:username => user.username)
+          me_contact = user.contacts.first(:username => @me.username)
+          already_requested = contact_requests.first(:from_username => user.username, :user_username => @me.username, :accepted => false, :ignored => false)
+        end
+        
+        if user.last_name
+          user.last_name = user.last_name.to_s[0,1]
+        end
+        ?>
+        <?r unless session[:username] == user.username ?>
+          <li>
+            <div class="list_info">
+              <a href="/people/#{user.username}">#{user.username}</a> 
+              <?r if user.last_name ?>
+                - <em>#{user.first_name} #{user.last_name}.</em>
+              <?r end ?>
+            </div>
+            <?r if session[:username] ?>
+              <div class="list_actions">
+                <?r unless (user.contacts.include? @me) || requested_contact || already_requested ?>
+                  <a href="/people/#{user.username}/add_contact" class="list_item_add">
+                    <span>Add Contact</span>
+                  </a>
+                <?r end ?>
+                <?r if my_contact || me_contact ?>
+                  <em>Already a contact</em>
+                <?r elsif requested_contact ?>
+                  <em>Add Request Pending</em>
+                <?r elsif already_requested ?>
+                  <em>Awaiting your confirmation</em>
+                <?r end ?>
+              </div>
+            <?r end ?>
+            <div class="clear"></div>
+          </li>
+        <?r end ?>
+      <?r end ?>
+    </ul>
+    <div class="pagination">
+      #{@page.navigation}
+    </div>
+  <?r else ?>
+    <p>No users registered yet...</p>
+  <?r end ?>
+<?r end ?>
+
+

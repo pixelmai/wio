@@ -1,0 +1,77 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @team.nil? ?>
+  <?r if @me.teams.length != 0 ?>
+    <ul>
+      <?r @me.teams.each do |team| ?>
+        <li>
+          <div class="list_info">
+            <a href="/teams/#{u(team.name)}"><strong>#{team.name}</strong></a>
+          </div>
+          <div class="list_actions">
+            <?r if team.team_lead.username == @me.username ?>
+              <a href="/my_account/teams/#{u(team.name)}/edit" class="list_item_edit" title="Edit">
+                <span>Edit</span>
+              </a>
+              <a href="#{Rs()}/#{u(team.name)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+                <span>Delete</span>
+              </a>
+            <?r elsif team.members.include? @me ?>
+              <a href="#{Rs()}/#{u(team.name)}/leave" onclick="return (confirm('Are you sure in leaving this team?'))" class="list_item_leave_group" title="Leave Group">
+                <span>Leave</span>
+              </a>
+            <?r end ?>
+          </div>
+          <div class="clear"></div>
+        </li>
+      <?r end ?>
+    </ul>
+  <?r else ?>
+    <p>You have no teams created yet...</p>
+  <?r end ?>
+
+
+<?r else ?>
+  
+
+  
+  <?r if not @action.nil? and @action == :edit ?>
+
+        <form action="/my_account/teams/#{u(@team.name)}/edit" method="post">
+          <ol>
+            <li>
+              <label for="description">Description:</label><br />
+              <textarea name="description" id="description">#{h(@team.description)}</textarea>
+            </li>
+            <li>
+              <input type="submit" value="Edit Team" />
+            </li>
+          </ol>
+        </form>
+
+  <?r elsif not @action.nil? and @action == :invite ?>
+    #{render_fragment 'my_account/teams/invite.xhtml'}
+  <?r else ?>
+    <?r if not @team.description.nil? and not @team.description.empty? ?>
+      <p>
+        <strong>Description:</strong><br />
+        #{nl2br(@team.description)}
+      </p>
+    <?r end ?>
+    
+    <p>
+      <a href="/my_account/teams/#{u(@team.name)}/edit" class="button edit">
+        <img src="/images/icons/edit.png" alt="" /><span>Edit Team</span></a>
+      </a>
+    </p>
+    
+    <h3>Team Members</h3>
+    <ul>
+    <?r @team.members.all.each do |member| ?>
+      <li><a href="/people/#{u(member.username)}">#{member.username}</a></li>
+    <?r end ?>
+    </ul>
+  <?r end ?>
+<?r end ?>

@@ -1,0 +1,324 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @task.nil? ?>
+
+  <?r
+    incomplete_tasks = @me.tasks.incomplete
+    completed_tasks = @me.tasks.completed({:limit => 5})
+  ?>
+  <?r if completed_tasks.empty? and incomplete_tasks.empty? ?>
+    <p> You have no tasks created yet.</p>
+  <?r else ?>
+    <div id="incomplete_tasks">
+    <h3>Active Tasks</h3>
+    #{render_fragment 'my_account/tasks/list.xhtml', {:tasks => incomplete_tasks}}
+    </div>
+    <div id="completed_tasks">
+    <h3>Completed Tasks</h3>
+    #{render_fragment 'my_account/tasks/list.xhtml', {:tasks => completed_tasks}}
+    </div>
+  <?r end ?>
+  
+
+<?r else ?>
+  
+  <?r if not @action.nil? and @action == :edit ?>
+  <?r @on_load = "load" ?>
+    <script type="text/javascript">
+      
+      function load(selectbox, selectboxVal, rel)
+      {
+		      <?r unless @task.context.nil? ?>
+		        var c = #{@task.context.context_id}
+		      <?r else ?>
+		        var c = ""
+		      <?r end ?>
+		      
+		      <?r unless @task.project.nil? ?>
+		        var p = #{@task.project.project_id}
+		      <?r else ?>
+		        var p = ""
+		      <?r end ?>
+		      
+		      
+		      for (var i in rel){
+            for (var y=0; y < rel.length; y++){
+            
+              if (p != ""){
+                if (p == selectbox.options[y].value) {
+                  selectbox.options[y].selected = true;
+                }
+              }
+              
+              if (c != ""){
+                if (c == selectboxVal.options[y].value) {
+                  selectboxVal.options[y].selected = true;
+                }
+              }
+
+            }
+		      }
+      }
+
+	    function addOption(selectbox, text, value) {
+		    var option = document.createElement("option");
+		    option.text = text;
+		    option.value = value;
+		    option.id = value;
+		    selectbox.options.add(option);
+	    }
+	
+	    function catchVal(selectbox, selectboxVal, rel) {
+	
+		    selectbox.onchange = function() { 
+
+		    proj_value = selectbox.value;
+		
+		    for (var i in rel){
+		      if (proj_value == i){
+            context_value = rel[i];
+			    }
+			
+		    }
+
+		    for (var i in rel){
+          for (var y=0;y<rel.length;y++){
+            if (context_value == selectboxVal.options[y].value) {
+              selectboxVal.options[y].selected = true;
+            }
+          }
+		    }
+			  
+			  
+		    };			
+	    }
+    </script>
+
+        <form action="/my_account/tasks/#{u(@task.task_id)}/edit" method="post" name="edit_task">
+          <ol>
+            <li>
+              <label for="name">Name*:</label>
+              <input type="text" name="name" id="name" value="#{h(@task.name)}"/>
+            </li>
+            <li>
+              <label for="description">Description:</label><br />
+              <textarea name="description" id="description">#{h(@task.description)}</textarea>
+            </li>
+            <li>
+              <label for="due_date">Due Date:</label>
+              <span><select name="deadline_month">
+              <option value="">MM</option>
+              <?r
+                unless @task.deadline.nil?
+                  @deadline = @task.deadline
+                  y = @deadline.year
+                  m = @deadline.month
+                  d = @deadline.day 
+                end
+                for @num in (1..12) ?>
+                  <option value="#{@num}"
+                  <?r if @num == m ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              <span><select name="deadline_day">
+              <option value="">DD</option>
+              <?r for @num in (1..31) ?>
+                  <option value="#{@num}"
+                  <?r if @num == d ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              
+              <span><select name="deadline_year">
+              <option value="">YYYY</option>
+              <?r current_year = DateTime.now.year ?>
+              <?r current_year.upto(current_year + 4) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == y ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+            </li>
+            
+            <li>
+              <label for="progress">Progress:</label>
+              <input type="text" name="progress" id="progress" value="#{h(@task.progress)}"/>
+            </li>
+            
+            <?r unless @me.projects.all(:status => 1).length == 0 ?>
+              <li>
+                <label for="project">Project:</label>
+                <select id="project" name="project">
+                  <option value="" selected="selected">Choose Project..</option>
+
+                </select>
+              </li>
+            <?r end ?>
+            <li>
+              <label for="context">Context:</label>
+              <select id="context" name="context">
+              </select>
+            </li>
+            <li>
+              <label for="notify">Notify:</label>
+              <span><select name="notify_month" id="notify_month">
+              <option value="">MM</option>
+              <?r
+                # # #
+                if @task.notification && @task.notification.when
+                  @notify = @task.notification.when
+                  y = @notify.year
+                  m = @notify.month
+                  d = @notify.day 
+                  h = @notify.hour
+                  min = @notify.min
+                else
+                  y = nil
+                  m = nil
+                  d = nil
+                  h = nil
+                  min = nil
+                end
+                
+                for @num in (1..12) ?>
+                  <option value="#{@num}"
+                  <?r if @num == m ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              <span><select name="notify_day" id="notify_day">
+              <option value="">DD</option>
+              <?r for @num in (1..31) ?>
+                  <option value="#{@num}"
+                  <?r if @num == d ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              
+              <span><select name="notify_year" id="notify_year">
+              <option value="">YYYY</option>
+              <?r current_year = DateTime.now.year ?>
+              <?r current_year.upto(current_year + 4) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == y ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              
+              <span><select name="notify_hour" id="notify_hour">
+              <option value="">HH</option>
+              <?r 0.upto(23) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == h ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              :
+              <span><select name="notify_minute" id="notify_minute">
+              <option value="">MM</option>
+              <?r 0.upto(59) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == min ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{(@num > 9) ? @num.to_s : ('0'+@num.to_s)}</option>
+              <?r end ?>
+              </select></span>
+              
+            </li>
+            <li>
+              <input type="hidden" name="form_location" id="form_location" value="my_account/tasks/#{u(@task.name)}"/>
+              <input type="submit" value="Edit Task" />
+            </li>
+          </ol>
+        </form>
+        
+	      <script type="text/javascript">
+		      var p = new Array();
+		      var c = new Array();
+		      var pc = new Array();
+
+          <?r @me.projects.all({:status => 1}).each do |project| ?>
+		        p["#{project.name}"] = "#{project.project_id}";
+          <?r end ?>
+                  		
+          <?r @me.contexts.each do |context| ?>
+		        c["#{context.name}"] = "#{context.context_id}";
+          <?r end ?>
+          
+          <?r @me.projects.all({:status => 1}).each do |project| ?>
+		        pc["#{project.project_id}"] = "#{project.default_context.context_id}";
+          <?r end ?>
+          
+		      for (var i in p){
+			      addOption(document.edit_task.project, i, p[i]);
+		      }
+		      for (var i in c){
+			      addOption(document.edit_task.context, i, c[i]);
+		      }		
+		      
+		      catchVal(document.edit_task.project, document.edit_task.context, pc);
+		      
+		      load(document.edit_task.project, document.edit_task.context, pc);		
+	      </script>
+
+
+  <?r else ?>
+    <?r unless @task.deadline.nil?
+          duedate = @task.deadline
+          formatted_duedate = duedate.strftime("%B %d, %Y") ?>
+          <strong>Due Date:</strong> #{formatted_duedate}<br />
+    <?r end ?>
+    <strong>Progress:</strong> #{@task.progress}%<br />
+    <?r unless @task.project.nil? ?>
+      <strong>Project: </strong>#{@task.project.name}<br />
+    <?r end ?>
+    
+    <?r unless @task.context.nil? ?>
+      <strong>Context: </strong>#{@task.context.name}<br />
+    <?r end ?>
+    
+    <?r unless @task.description.nil? ?>
+      <p>
+        <strong>Description:</strong><br /> #{nl2br(@task.description)}<br />
+      </p>
+    <?r end ?>
+    
+    <?r unless @task.parent_task.nil? ?>
+      <p>
+        <strong>Parent Task:</strong><br /> <a href="/teams/#{u(@task.team_name)}/tasks/">#{u(@task.team_name)}</a> - #{@task.parent_task.name}<br />
+      </p>
+    <?r end ?>
+
+    <p>
+      <a href="/my_account/tasks/#{u(@task.task_id)}/edit" class="button edit">
+        <img src="/images/icons/edit.png" alt="" /><span>Edit Task</span>
+      </a>
+      <!--
+      <a href="/my_account/tasks/#{u(@task.task_id)}/notify" class="button">
+        <span>Notify Me</span>
+      </a>
+      -->
+    </p>
+    
+    
+  <?r end ?>
+  
+<?r end ?>

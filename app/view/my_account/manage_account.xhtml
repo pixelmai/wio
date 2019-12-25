@@ -1,0 +1,39 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+ 
+ <form action="/my_account/manage_account" method="post">
+    <ol>
+      
+      <li>
+        <label for="email_address">Email Address*:</label>
+        <input type="text" name="email_address" id="email_address" value="#{@me.email_address}" />
+      </li>
+      
+      <li>
+        <label for="mobile_number">Mobile Number:</label>
+        <input type="text" name="mobile_number" id="mobile_number" value="#{@me.mobile_number}" />
+      </li>
+      
+      <li>
+        <label for="old_password">Old Password:</label>
+        <input type="password" name="old_password" id="old_password" value="" />
+      </li>
+      
+      <li>
+        <label for="password">New Password:</label>
+        <input type="password" name="password" id="password" value="" />
+      </li>
+      
+      <li>
+        <label for="password_confirmation">Retype New Password:</label>
+        <input type="password" name="password_confirmation" id="password_confirmation" value="" />
+      </li>
+      
+      <li>
+        <input type="submit" value="Edit Account Information" />
+      </li>
+      
+    </ol>
+  </form>

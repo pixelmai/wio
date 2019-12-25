@@ -1,0 +1,115 @@
+<h2>#{@title}</h2>
+#{render_fragment 'notices.xhtml'}
+<?r if @action == 'view' ?>
+  <p>
+    <strong>Team Leader:</strong> <a href="/people/#{@team.team_lead.username}">#{@team.team_lead.username}</a><br />
+    <?r if not @team.description.nil? and not @team.description.empty? ?>
+      <strong>Description:</strong><br />
+      #{nl2br(@team.description)}
+    <?r end ?>
+  </p>
+  <?r if logged_in? ?>
+    <p>
+    <?r if @team.team_lead == @me ?>
+        <a href="/my_account/teams/#{u(@team.name)}/edit" class="button edit">
+          <img src="/images/icons/edit.png" alt="" /><span>Edit Team</span></a>
+        </a>
+    <?r end ?>
+    
+    <?r if @team.members.include? @me and @team.team_lead != @me ?>
+        <a href="/my_account/teams/#{u(@team.name)}/leave" class="button delete">
+          <img src="/images/icons/team_leave.png" alt="" /><span>Leave Team</span></a>
+        </a>
+    <?r end ?>
+    </p>
+    
+    <?r member = @team.members.first(:username => session[:username])
+      if member.nil? ?>
+        <p><a href="/teams/#{u(@team.name)}/join" class="button">
+          <img src="/images/icons/contact_add.png" alt="" /><span>Join Team</span></a>
+        </p>
+      <?r end ?>
+  <?r end ?>
+<?r elsif @action == :invite ?>
+  #{render_fragment 'teams/invite.xhtml'}
+  
+<?r elsif @action == :files ?>
+  #{render_fragment 'teams/files.xhtml'}
+
+<?r elsif @action == :tasks ?>
+  #{render_fragment 'teams/tasks.xhtml'}
+  
+<?r elsif @action == :projects ?>
+  #{render_fragment 'teams/projects.xhtml'}
+  
+<?r elsif @action == :files ?>
+  
+  
+<?r elsif @action == :members ?>   
+  <ul>
+            
+    <?r @team.members.all.each do |member| ?>
+      <li>
+        <div class="list_info">
+          <a href="/people/#{u(member.username)}">#{member.username}</a>
+        </div>
+        
+        <div class="list_actions">
+        <?r if @team.team_lead == @me and member.username != @me.username ?>
+          <a title="Remove Member" class="list_item_leave_group" onclick="return (confirm('Are you sure in removing this member?'))" href="/teams/#{u(@team.name)}/remove/#{u(member.username)}">
+            <span>Remove Member</span>
+          </a>
+        <?r end ?>
+        <?r if session[:username] and member.username == @me.username and @team.team_lead != @me ?>
+          <a href="/my_account/teams/#{u(@team.name)}/leave" onclick="return (confirm('Are you sure in leaving this team?'))" class="list_item_leave_group" title="Leave Group">
+            <span>Leave</span>
+          </a>
+        <?r end ?>
+            
+        </div>
+        <div class="clear"></div>  
+      </li>
+    <?r end ?>
+  </ul>
+<?r else ?>
+  <p>
+  Browse for teams here in WIO.
+  </p>
+
+  <?r unless @all_teams.nil? ?>
+    <ul id="teams_list">
+    
+      <?r @all_teams.each do |team| ?>
+  
+        <li>
+          <div class="list_info">
+            <a href="/teams/#{u(team.name)}">#{team.name}</a> 
+          </div>
+          <div class="list_actions">
+            <?r if not session[:username].nil? and team.team_lead.username != session[:username]
+              member = team.members.first(:username => session[:username]) ?>
+              <?r if member.nil? ?>
+                <a href="/teams/#{u(team.name)}/join" class="list_item_add">
+                  <span>Join Team</span>
+                </a>
+              <?r else ?>
+                <em>Member</em>
+              <?r end ?>
+            <?r elsif not session[:username].nil? and team.team_lead.username == session[:username]  ?>
+              <em>Admin</em>
+            <?r end ?>
+          </div>  
+          <div class="clear"></div>
+        </li>
+      <?r end ?>
+    </ul>
+    <div class="pagination">
+      #{@page.navigation}
+    </div>
+  <?r else ?>
+    <p>No teams registered yet...</p>
+  <?r end ?>
+
+
+<?r end ?>
+

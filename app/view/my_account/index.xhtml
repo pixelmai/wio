@@ -1,0 +1,43 @@
+<h2>#{session[:username]}'s Profile</h2>
+
+#{render_fragment 'notices.xhtml'}
+<ul>
+
+<?r if not @me.last_name.nil? || @me.first_name.nil? || @me.middle_name.nil? 
+      @me.middle_name = @me.middle_name[0,1]
+?>
+  <li><strong>Name:</strong> #{@me.first_name} #{@me.middle_name}. #{@me.last_name}</li>
+<?r end ?>
+
+<?r if not @me.address.nil? ?>
+  <li><strong>Address:</strong> #{@me.address}</li>
+<?r end ?>
+
+<?r if not @me.email_address.nil? ?>
+  <li><strong>Email Address:</strong> <a href="mailto:#{@me.email_address}">#{@me.email_address}</a></li>
+<?r end ?>
+
+<?r if not @me.birth_date.nil? 
+  bday = @me.birth_date
+  formatted_bday = bday.strftime("%B %d, %Y")
+?>
+  <li><strong>Birthdate:</strong> #{formatted_bday}</a></li>
+<?r end ?>
+
+<?r if not @me.mobile_number.nil? and not @me.mobile_number == '' ?>
+  <li><strong>Mobile Number: </strong>+#{@me.mobile_number}</li>
+<?r end ?>
+
+<?r if not @me.home_phone_number.nil? ?>
+  <li><strong>Home Phone Number:</strong> #{@me.home_phone_number}</a></li>
+<?r end ?>
+
+<?r if not @me.work_phone_number.nil? ?>
+  <li><strong>Work Phone Number:</strong> #{@me.work_phone_number}</a></li>
+<?r end ?>
+</ul>
+
+<p><a href="/my_account/edit_profile" class="button edit">
+  <img src="/images/icons/edit.png" alt="" /><span>Edit Profile</span></a>
+</p>
+

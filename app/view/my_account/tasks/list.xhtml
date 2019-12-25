@@ -1,0 +1,92 @@
+<ul class="tasks">
+  <?r unless tasks.length == 0 ?>
+    <?r tasks.each do |task| ?>
+      <?r unless task.team_name and task.task_task_id.nil? ?>
+        <li id="task_#{task.task_id}" 
+          <?r if task.overdue? and task.progress != 100 ?>class="overdue"<?r end ?>
+          <?r if task.deadline and task.days_countdown == 0 and task.completed == false ?>class="today"<?r end ?>
+        >
+          <div class="list_info">
+          
+            <?r if task.project.nil? or task.project.status == 1 ?>
+              <input type="checkbox" <?r if task.completed? ?>checked="checked"<?r end ?> 
+                name="completed" value="#{u(task.task_id)}" />    
+            <?r end ?> 
+           
+             
+             
+            <?r if task.completed == true ?>
+              <?r if task.project and task.project.status == 0 ?>
+                <input type="checkbox" <?r if task.completed? ?>checked="checked"<?r end ?> 
+                  name="completed" value="#{u(task.task_id)}" disabled="disabled" /> 
+              <?r end ?>
+                #{task.date_completed.strftime('%m/%d/%Y')}
+            <?r end ?>
+            
+            <?r unless @where == 'tasks_home' ?>
+              <a href="/my_account/tasks/#{u(task.task_id)}">
+                <strong>#{task.name}</strong>
+              </a>
+            <?r else ?>
+              <strong>#{task.name}</strong>
+            <?r end ?>
+            
+            <?r unless @where == 'context' or @team ?>
+              <em>(<a href="/my_account/contexts/#{u(task.context.name)}">#{task.context.name unless task.context.nil?}</a>)</em>
+            <?r end ?>
+            
+            <?r if task.team_name and @where != 'team' ?>
+              <em>(<a href="/teams/#{u(task.team_name)}">#{task.team_name}</a>)</em>
+            <?r end ?>
+            
+            <?r unless task.project.nil? ?>
+              <?r unless @where == 'project' ?>
+                <?r unless task.project.nil? ?>
+                  <?r unless task.team_name ?>
+                    <a href="/my_account/projects/#{u(task.project.name)}" title="#{task.project.name}">[P]</a>
+                  <?r else ?>
+                    <a href="/teams/#{u(task.team_name)}/projects/#{u(task.project.name)}" title="#{task.project.name}">[P]</a>
+                  <?r end ?>
+                <?r end ?>
+              <?r end ?>
+            <?r end ?>
+          </div>
+          
+          <div class="list_actions">
+            
+            <?r if task.deadline ?>
+              <span class="deadline">
+              <?r if task.overdue? and task.completed == false ?>
+                Overdue by #{task.days_overdue} <?r if task.days_overdue > 1 ?>days<?r else ?>day<?r end ?>
+              <?r elsif task.days_countdown == 0 and task.completed == false ?>
+                Due Today
+              <?r else ?>
+                <?r if task.completed == false ?>
+                  Due in #{task.days_countdown} <?r if task.days_countdown > 1 ?>days<?r else ?>day<?r end ?>
+                <?r end ?>
+              <?r end ?>
+              </span>
+            <?r end ?>   
+            
+
+            
+            
+            <?r if task.project.nil? or task.project.status == 1 ?>
+              <a href="/my_account/tasks/#{u(task.task_id)}/edit" class="list_item_edit" title="Edit">
+                <span>Edit</span>
+              </a>
+              <a href="/my_account/tasks/#{u(task.task_id)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+                <span>Delete</span>
+              </a>  
+            <?r end ?>
+          </div>
+          <div class="clear"></div>
+          
+          
+          <!-- onclick="$.get('#{Rs()}/#{u(task.name)}/completed', {},
+                function(){alert('#{u(task.name)} is completed')}" -->
+        </li>
+      <?r end ?>
+    <?r end ?>
+  <?r end ?>
+</ul>

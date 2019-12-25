@@ -1,0 +1,24 @@
+<div class="sidebar_container">
+  <h3>Mailboxes</h3>
+  <ul class="sidebar_nav">
+    <li>
+      <a href="/my_account/messages">
+      <?r if @action == 'inbox' ?>
+        <strong>Inbox</strong>
+      <?r else ?>
+        Inbox
+      <?r end ?>
+      </a>
+    </li>
+    <li>
+    
+      <a href="/my_account/messages/sent">
+        <?r if @action == 'sent' ?>
+          <strong>Sent Messages</strong>
+        <?r else ?>
+          Sent Messages
+        <?r end ?>
+      </a>
+    </li>
+  </ul>
+</div>

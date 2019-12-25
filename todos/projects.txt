@@ -1,0 +1,9 @@
+===================================
+PROJECTS
+===================================
+
+** Projects can only be set to completed when no tasks are left unfinished
+-- Selectable Projects must be "active". 
+-- Cannot add a task on completed projects
+-- If a project is completed, further editing of tasks must be disabled.
+-- Setting a project to completed also modifies all the completed tasks into that date.

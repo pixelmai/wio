@@ -1,0 +1,20 @@
+===================================
+Ramaze Commands:
+===================================
+
+Start server (go to directory of app first)
+- ruby start.rb
+
+Stop server (while server is running...)
+- <Ctrl + C>
+
+Start irb with ramaze ((go to directory of app first)
+- irb
+- require 'ramaze-irb.rb'
+
+===================================
+Rake Commands:
+===================================
+
+List available tasks
+- rake --tasks

@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Wio - #{@title}</title>
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="expires" content="0" />
+    <meta name="description" content="Description for search engines" />
+    <meta name="generator" content="Ramaze #{Ramaze::VERSION}" />
+    <meta name="keywords" content="Ramaze, Your own keywords" />
+    <meta name="author" content="Max Mustermann" />
+    <meta name="date" content="#{Time.now.iso8601}" />
+
+    <style type="text/css" media="screen">
+      @import url( /css/main.css );
+    </style>
+    
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <?r if @js_include ?>
+      <script type="text/javascript" src="#{@js_include}"></script>
+    <?r end  ?>
+    
+  </head>
+  <body <?r unless @on_load.nil? ?> onload="#{@on_load}" <?r end ?> >
+  
+    <div id="header">
+      #{render_fragment 'navigation.xhtml'}
+    </div>
+    
+    #{render_fragment 'sub_navigation.xhtml'}
+
+
+      <div id="container">
+        
+        <div id="content">
+          #@content
+        </div>
+        
+        <?r unless @sidebar.nil? ?>
+          <div id="sidebar">
+            #{render_fragment @sidebar}
+          </div>
+        <?r end ?>
+        <div class="clear"></div>
+      </div>
+
+
+  </body>
+</html>

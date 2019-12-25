@@ -1,0 +1,231 @@
+#{render_fragment 'notices.xhtml'}
+
+<?r if @task.nil? ?>
+
+ <?r
+    incomplete_tasks = @team.tasks.incomplete({:task_task_id=>nil})
+    completed_tasks = @team.tasks.completed({:limit => 5, :task_task_id=>nil})
+  ?>
+  <?r if completed_tasks.empty? and incomplete_tasks.empty? ?>
+    <p> You have no tasks created yet.</p>
+  <?r else ?>
+    <div id="incomplete_tasks">
+    <h3>Active Tasks</h3>
+    #{render_fragment 'teams/tasks_list.xhtml', {:tasks => incomplete_tasks}}
+    </div>
+    <div id="completed_tasks">
+    <h3>Completed Tasks</h3>
+    #{render_fragment 'teams/tasks_list.xhtml', {:tasks => completed_tasks}}
+    </div>
+  <?r end ?>
+  
+
+<?r else ?>
+  
+  <?r if not @action.nil? and @task_action == :task_edit ?>
+
+        <form action="/teams/#{u(@team.name)}/tasks/#{u(@task.task_id)}?do=edit" method="post" name="edit_task">
+          <ol>
+            <li>
+              <label for="name">Name*:</label>
+              <input type="text" name="name" id="name" value="#{h(@task.name)}"/>
+            </li>
+            <li>
+              <label for="description">Description:</label><br />
+              <textarea name="description" id="description">#{h(@task.description)}</textarea>
+            </li>
+            <li>
+              <label for="notify">Due Date:</label>
+              <span><select name="deadline_month">
+              <option value="">MM</option>
+              <?r
+                unless @task.deadline.nil?
+                  @deadline = @task.deadline
+                  y = @deadline.year
+                  m = @deadline.month
+                  d = @deadline.day 
+                end
+                for @num in (1..12) ?>
+                  <option value="#{@num}"
+                  <?r if @num == m ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              <span><select name="deadline_day">
+              <option value="">DD</option>
+              <?r for @num in (1..31) ?>
+                  <option value="#{@num}"
+                  <?r if @num == d ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              
+              <span><select name="deadline_year">
+              <option value="">YYYY</option>
+              <?r current_year = DateTime.now.year ?>
+              <?r current_year.upto(current_year + 4) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == y ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+            </li>
+            
+            
+            <?r unless @team.projects.all(:status => 1).length == 0 ?>
+              <?r @team.projects.all({:status => 1}).each do |project| ?>
+                <label for="project">Project:</label>
+                <span><select name="project" id="project">
+                  <option value="">Select Project</option>
+		              <option value="#{project.project_id}" 
+  		             <?r if @task.project_project_id and @task.project_project_id == project.project_id ?>
+	                    selected="selected"
+	                 <?r end ?>                  
+		               >
+		              #{project.name}</option>
+		            </select>
+		            </span>
+              <?r end ?>
+            <?r end ?>
+
+            <li>
+              <label for="notify">Notify:</label>
+              <span><select name="notify_month" id="notify_month">
+              <option value="">MM</option>
+              <?r
+                # # #
+                if @task.notification && @task.notification.when
+                  @notify = @task.notification.when
+                  y = @notify.year
+                  m = @notify.month
+                  d = @notify.day 
+                  h = @notify.hour
+                  min = @notify.min
+                else
+                  y = nil
+                  m = nil
+                  d = nil
+                  h = nil
+                  min = nil
+                end
+                
+                for @num in (1..12) ?>
+                  <option value="#{@num}"
+                  <?r if @num == m ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              <span><select name="notify_day" id="notify_day">
+              <option value="">DD</option>
+              <?r for @num in (1..31) ?>
+                  <option value="#{@num}"
+                  <?r if @num == d ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              
+              <span><select name="notify_year" id="notify_year">
+              <option value="">YYYY</option>
+              <?r current_year = DateTime.now.year ?>
+              <?r current_year.upto(current_year + 4) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == y ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              
+              <span><select name="notify_hour" id="notify_hour">
+              <option value="">HH</option>
+              <?r 0.upto(23) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == h ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{@num}</option>
+              <?r end ?>
+              </select></span>
+              :
+              <span><select name="notify_minute" id="notify_minute">
+              <option value="">MM</option>
+              <?r 0.upto(59) do |@num| ?>
+                  <option value="#{@num}"
+                  <?r if @num == min ?>
+                    selected="selected"
+                  <?r end ?>
+                  >#{(@num > 9) ? @num.to_s : ('0'+@num.to_s)}</option>
+              <?r end ?>
+              </select></span>
+              
+            </li>
+            <li>
+             
+              <input type="submit" value="Edit Task" />
+            </li>
+          </ol>
+        </form>
+        
+
+  <?r  elsif not @action.nil? and @task_action == :view_task ?>
+    <?r unless @task.deadline.nil? and @task_action == :view_task
+          duedate = @task.deadline
+          formatted_duedate = duedate.strftime("%B %d, %Y") ?>
+          <strong>Due Date:</strong> #{formatted_duedate}<br />
+    <?r end ?>
+    
+    
+    <?r unless @task.child_tasks.empty? 
+      psum = 0
+      @task.child_tasks.each {|c| psum += c.progress}
+      r = psum / @task.child_tasks.length
+      @progress = (psum / @task.child_tasks.length).ceil
+    end ?>
+
+    <?r if @progress ?>
+      <strong>Progress:</strong> #{@progress}%<br />
+    <?r end ?>  
+    
+    <?r unless @task.project.nil? ?>
+      <strong>Project: </strong>#{@task.project.name}<br />
+    <?r end ?>
+    
+    <?r unless @task.context.nil? ?>
+      <strong>Context: </strong>#{@task.context.name}<br />
+    <?r end ?>
+    
+    <?r unless @task.description.nil? ?>
+      <p>
+        <strong>Description:</strong><br /> #{nl2br(@task.description)}<br />
+      </p>
+    <?r end ?>
+
+    <?r unless @task.assigned_to.nil? ?>
+      <p><strong>Assigned to:</strong></p>
+      <ul class="ordinary">
+        <?r @task.child_tasks.each do |task| ?>
+          <li><a href="/people/#{u(task.user_username)}">#{task.user_username}</li>
+        <?r end ?>
+      </ul>
+    <?r end ?>
+
+    <p>
+      <a href="/teams/#{u(@team.name)}/tasks/#{u(@task.task_id)}?do=edit" class="button edit">
+        <img src="/images/icons/edit.png" alt="" /><span>Edit Task</span>
+      </a>
+    </p>
+    
+    
+  <?r end ?>
+  
+<?r end ?>

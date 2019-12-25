@@ -1,0 +1,110 @@
+<div class="sidebar_container">
+
+<?r if @where == 'project' and @project.status == 0 ?>
+  <h3>Completed Project</h3>
+  <p>You cannot add a task on a completed project</p>
+<?r else ?>
+  <script type="text/javascript">
+
+	  function addOption(selectbox, text, value) {
+		  var option = document.createElement("option");
+		  option.text = text;
+		  option.value = value;
+		  option.id = value;
+		  selectbox.options.add(option);
+	  }
+  </script>
+  
+  <?r if @where == 'teams' ?>
+    <h3 class="collapsible"><a href="#" id ="toggle_quick_add_button">Add a Task</a></h3>
+    <div id ="toggle_quick_add">
+  <?r else ?>
+    <h3>Add a Task</h3>
+  <?r end ?>
+
+    <form action="/teams/#{u(@team.name)}/add_task" method="post" name="add_task">
+      <ol>
+        <li>
+          <label for="name">Name*:</label>
+          <input type="text" name="name" id="name" value=""/>
+        </li>
+        <li>
+          <label for="description">Description:</label>
+          <textarea name="description" id="description"></textarea>
+        </li> 
+        <li>
+          <fieldset>
+            <legend><span>Due Date: </span></legend>
+            <span><select name="deadline_month">
+            <option value="">MM</option>
+            <?r for @num in (1..12) ?>
+                <option value="#{@num}">#{@num}</option>
+            <?r end ?>
+            </select></span>
+            <span><select name="deadline_day">
+            <option value="">DD</option>
+            <?r for @num in (1..31) ?>
+                <option value="#{@num}">#{@num}</option>
+            <?r end ?>
+            </select></span>
+            
+            <span><select name="deadline_year">
+            <option value="">YYYY</option>
+            <?r @date = Date.today ?>
+            <?r y = @date.year ?>
+            <?r y.upto(2011) do |@num| ?>
+                <option value="#{@num}">#{@num}</option>
+            <?r end ?>
+            </select></span>
+          </fieldset>
+        </li>
+        
+        <?r unless @team.projects.length == 0 ?>
+          <li>
+            <label for="project">Project:</label>
+            <select id="project" name="project">           
+              <option value="" selected="selected">Choose Project..</option>
+            </select>
+          </li>
+        <?r end ?>
+        
+        <?r if @team and (@team.team_lead == @me) ?>
+          <li>
+            <label for="assigned">Assigned To:</label>
+            <select id="assigned" name="assigned">
+              <option value="all">All Current Members</option>
+              <?r @team.members.each do |member| ?>
+                <option value="#{member.username}">#{member.username}</option>
+              <?r end ?>
+            </select>
+          </li>
+        <?r else ?>
+          <input type="hidden" name="assigned" value="#{@me.username}" />
+        <?r end ?>
+
+        <li>
+          <input type="submit" value="Add Task" />
+        </li>
+      </ol>
+    </form>
+    
+  <?r if @where == 'teams' ?>
+  </div>
+  <?r end ?>
+  
+	  <script type="text/javascript">
+		  var p = new Array();
+
+		
+      <?r @team.projects.all(:status => 1).each do |project| ?>
+		    p["#{project.name}"] = "#{project.project_id}";
+      <?r end ?>
+ 
+		  for (var i in p){
+			  addOption(document.add_task.project, i, p[i]);
+		  }
+	  </script>
+<?r end ?>
+</div>
+
+

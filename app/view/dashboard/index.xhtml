@@ -1,0 +1,70 @@
+<h2>Dashboard</h2>
+#{render_fragment 'notices.xhtml'}
+
+<?r
+contexts_all = @me.contexts.tasks.all({:completed => false})       
+unless contexts_all.length == 0
+  @me.contexts.each do |context|
+    incomplete_tasks = 
+    context.tasks.all({
+      :completed => false, :deadline.not => nil,
+      :order => [:deadline.asc]
+    }).concat(context.tasks.all({
+      :completed => false,:deadline => nil
+    }))
+    unless incomplete_tasks.length == 0 ?>
+      <h3><a href="/my_account/contexts/#{u(context.name)}">#{context.name}</a></h3>
+      <ul class="tasks" id="#list_{context.context_id}">
+      <?r incomplete_tasks.each do |task| ?>
+        <?r unless task.team_name and task.task_task_id.nil? ?>
+          <li id="task_#{task.task_id}" 
+            <?r if task.overdue? ?>class="overdue"<?r end ?>
+            <?r if task.deadline and task.days_countdown == 0 and task.completed == false ?>class="today"<?r end ?>
+          >
+            <div class="list_info">
+              <input type="checkbox" name="completed" value="#{u(task.task_id)}" />
+              <a href="/my_account/tasks/#{u(task.task_id)}"><strong>#{task.name}</strong></a>
+              <?r unless task.project.nil? ?>
+                <?r unless task.team_name ?>
+                  <a href="/my_account/projects/#{u(task.project.name)}" title="#{task.project.name}">[P]</a>
+                <?r else ?>
+                  <a href="/teams/#{u(task.team_name)}/projects/#{u(task.project.name)}" title="#{task.project.name}">[P]</a>
+                <?r end ?>
+              <?r end ?>
+              <?r if task.team_name and @where != 'team' ?>
+                <em>(<a href="/teams/#{u(task.team_name)}">#{task.team_name}</a>)</em>
+              <?r end ?>
+            </div>
+            <div class="list_actions">  
+            
+              <?r if task.deadline ?>
+                <span class="deadline">
+                <?r if task.overdue? and task.completed == false ?>
+                  Overdue by #{task.days_overdue} <?r if task.days_overdue > 1 ?>days<?r else ?>day<?r end ?>
+                <?r elsif task.days_countdown == 0 and task.completed == false ?>
+                  Due Today
+                <?r else ?>
+                  <?r if task.completed == false ?>
+                    Due in #{task.days_countdown} <?r if task.days_countdown > 1 ?>days<?r else ?>day<?r end ?>
+                  <?r end ?>
+                <?r end ?>
+                </span>
+              <?r end ?>   
+            
+              <a href="/my_account/tasks/#{u(task.task_id)}/edit" class="list_item_edit" title="Edit">
+                <span>Edit</span>
+              </a> 
+              <a href="/my_account/tasks/#{u(task.task_id)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+                <span>Delete</span>
+              </a>
+            </div>
+            <div class="clear"></div>
+          </li>
+         <?r end ?>
+       <?r end ?>
+      </ul>
+    <?r end ?>
+  <?r end ?>
+<?r else ?>
+  <p>No active tasks yet... Care to add one?</p>
+<?r end ?>

@@ -1,0 +1,8 @@
+===================================
+CONTACTS
+===================================
+
+-- Deleting a contact doesn't work (if you are the one who invited him/her)
+** When you are invited by another user, you may still send a request to that user. 
+-- Contacts now unable to ACCEPT REQUEST (not added in the database) NEW!
+

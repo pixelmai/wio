@@ -1,0 +1,41 @@
+<?r if @project_action == :all_projects ?>
+  <div class="sidebar_container">
+    <h3>Add a Project</h3>
+
+    <form action="/my_account/add_project" method="post">
+      <ol>
+        <li>
+          <label for="name">Name*:</label>
+          <input type="text" name="name" id="name" value=""/>
+        </li>
+        <li>
+          <label for="description">Description:</label>
+          <textarea name="description" id="description"></textarea>
+        </li> 
+        <li>
+          <input type="hidden" name="team" value="#{@team.name}" />
+          <input type="submit" value="Add Project" />
+        </li>
+      </ol>
+    </form>
+  </div>
+<?r else ?>
+
+<div class="sidebar_container">
+  <h3>Related Actions</h3>
+  <ul>
+    <li><a href="/teams/#{u(@team.name)}/projects">Manage Projects</a></li>
+  </ul>
+</div>
+
+  <?r unless @team.projects.all({:status => 1 }).length == 0 ?>
+    <div class="sidebar_container">
+    <h3>Team's other projects</h3>
+    <ul>
+    <?r @team.projects.all({:status => 1 }).each do |project| ?>
+      <li><a href="/teams/#{u(@team.name)}/projects/#{u(project.name)}">#{project.name}</a></li>
+    <?r end ?>
+    </ul>
+    </div>
+  <?r end ?>
+<?r end ?>

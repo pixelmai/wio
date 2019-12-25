@@ -1,0 +1,30 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @me.contacts.length != 0 ?>
+
+  <ul>
+  <?r @me.contacts.each do |contact| ?>
+    <li>
+      <div class="list_info">
+        <a href="/people/#{u(contact.username)}"><strong>#{contact.username}</strong></a>
+      </div>
+      <div class="list_actions">
+        <a href="/people/#{u(contact.username)}/send_message" class="list_item_message" title="Send Message">
+          <span>Send Message</span>
+        </a>
+        <a href="#{Rs()}/#{u(contact.username)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+          <span>Delete</span>
+        </a>
+      </div>
+      <div class="clear"></div>
+    </li>
+  <?r end ?>
+  </ul>
+
+<?r else ?>
+
+  <p>You have no contacts yet.</p>
+
+<?r end ?>

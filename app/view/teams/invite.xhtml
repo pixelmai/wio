@@ -1,0 +1,95 @@
+#{render_fragment 'notices.xhtml'}
+
+<?r if @action == :invite and @where != :search_results ?>
+  <?r contacts = @me.contacts.all 
+    if contacts.length != 0 ?>
+      <h4>Invite From Contacts</h4>
+      <ul id="people_list">
+      <?r contacts.each do |contact| ?>
+        <li>
+          <div class="list_info">
+            <a href="/people/#{u(contact.username)}"><strong>#{contact.username}</strong></a>
+          </div>
+          <?r membership = @team.members.first(:username => contact.username) ?>
+          <div class="list_actions">
+            <?r if membership.nil? ?>
+              <a href="/teams/#{u(@team.name)}/invite/#{u(contact.username)}" class="list_item_add">
+                <span>Invite User</span>
+              </a>
+            <?r else ?>
+              <em>Already a member</em>
+            <?r end ?>
+          </div>
+          <div class="clear"></div>
+        </li>
+      <?r end ?>
+      </ul>
+    <?r end ?>
+        
+
+  <h4>Search by Username</h4>
+  <form action="/teams/#{u(@team.name)}/invite_members" method="post" class="search">
+    <ol>
+      <li>
+        <label for="username">Username*:</label>
+        <input type="text" name="username" id="username"/>
+      </li>
+      <li>
+        <input type="hidden" name="search_type" value="username" />
+        <input type="submit" value="Search" />
+      </li>
+    </ol>
+  </form>
+
+
+  <h4>Search by Name</h4>
+  <form action="/teams/#{u(@team.name)}/invite_members" method="post" class="search">
+    <ol>
+      <li>
+        <label for="first_name">First Name*:</label>
+        <input type="text" name="first_name" id="first_name"/>
+      </li>
+      <li>
+        <label for="last_name">Last Name*:</label>
+        <input type="text" name="last_name" id="last_name"/>
+      </li>
+      <li>
+        <input type="hidden" name="search_type" value="name" />
+        <input type="submit" value="Search" />
+      </li>
+    </ol>
+  </form>
+<?r elsif @action == :invite and @where == :search_results ?>
+  <h4>Search Results</h4>
+  <?r if @search_results.length != 0 ?>
+    <ul id="people_list">
+      <?r @search_results.each do |user| ?>
+          <li>
+            <div class="list_info">
+              <a href="/people/#{user.username}">#{user.username}</a> 
+              <?r if user.last_name ?>
+                - <em>#{user.first_name} #{user.last_name}.</em>
+              <?r end ?>
+            </div>
+            
+            <?r membership = @team.members.first(:username => user.username) ?>
+              <div class="list_actions">
+                <?r if membership.nil? ?>
+                  <a href="/teams/#{u(@team.name)}/invite/#{u(user.username)}" class="list_item_add">
+                    <span>Invite User</span>
+                  </a>
+                <?r else ?>
+                  <em>Already a member</em>
+                <?r end ?>
+               
+              </div>
+
+            <div class="clear"></div>
+          </li>
+      <?r end ?>
+    </ul>
+  <?r else ?>
+    <p>The user you are searching for doesn't exist.</p>
+  <?r end ?>
+<?r end ?>
+

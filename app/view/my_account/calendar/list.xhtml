@@ -1,0 +1,27 @@
+<ul class="events">
+  <?r unless events.length == 0 ?>
+    <?r events.each do |event| ?>
+      <li id="event_#{event.calendar_event_id}">
+        <div class="list_info">
+          #{event.start_date.strftime('%m/%d/%Y')}
+          <strong>#{event.name}</strong>
+          
+        </div>
+        
+        <div class="list_actions">
+          <a href="/my_account/calendar/events/#{u(event.calendar_event_id)}/edit" class="list_item_edit" title="Edit">
+            <span>Edit</span>
+          </a>
+          <a href="/my_account/calendar/events/#{u(event.calendar_event_id)}/delete" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+            <span>Delete</span>
+          </a>  
+        </div>
+        <div class="clear"></div>
+        
+        
+        <!-- onclick="$.get('#{Rs()}/#{u(event.name)}/completed', {},
+              function(){alert('#{u(event.name)} is completed')}" -->
+      </li>
+    <?r end ?>
+  <?r end ?>
+</ul>

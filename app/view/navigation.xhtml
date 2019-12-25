@@ -1,0 +1,44 @@
+<div id="navigation_container">
+  <div id="main_navigation">
+    <a id="wio_logo" href="/"><span>Wio</span></a>
+      <?r
+        
+        locations = [
+          {:name => 'Dashboard', :url => '/dashboard'},
+          {:name => 'People', :url => '/people'},
+          {:name => 'Teams', :url => '/teams'}
+        ]
+        
+        if @team
+          url = '/teams/'+u(@team.name)
+          locations[locations.length] = {:name => @team.name, :url=> url}
+        end
+        
+        if logged_in? and session[:username] == 'admin'
+          locations.insert(0, {:name => 'Admin Panel', :url => '/admin'})
+        end
+        
+        links = '';
+        locations.each do |link|
+          o = {:href => link[:url],
+          #:contents => Wio::Helper::Html.element(:span, {:contents => link[:name]})};
+          :contents => link[:name]};
+          o[:class] = 'active' if main_location == link[:name]
+          links << Wio::Helper::Html.element(:a, o)
+        end
+      ?>
+      #{links}
+    
+
+    <div id="account_links">
+    <?r if session[:username].nil? and not session[:logged_in] ?>
+      <a href="/register">Register</a>
+      <a href="/">Login</a>
+    <?r else ?>
+      <a href="/my_account">#{session[:username]}</a> <a href="/my_account/manage_account">Account</a>
+      <a href="/my_account/messages">Messages</a>
+      <a href="/logout">Log out</a>
+    <?r end ?>
+    </div>
+  </div>
+</div>

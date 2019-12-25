@@ -1,0 +1,104 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if @action == :view_board ?> 
+  <?r if @topics.all.length != 0 ?>
+    <h3>Discussion Board Topics</h3>
+    <ul>
+    <?r @topics.all(:order=>[:discussion_board_topic_id.desc]).each do |topic| ?>
+      <li>
+        <div class="list_info">
+          <a href="/teams/board/#{u(@team.name)}/view/topic/#{u(topic.discussion_board_topic_id)}"><strong>#{topic.title}</strong></a>
+          <em>(<a href="/people/#{u(topic.user_username)}">#{topic.user_username}</a>)</em>
+        </div>
+        <div class="list_actions">
+          <?r if @team.team_lead == @me or topic.user_username == @me.username ?>
+            <a href="/teams/board/#{u(@team.name)}/edit/topic/#{u(topic.discussion_board_topic_id)}" class="list_item_edit" title="Edit">
+              <span>Edit</span>
+            </a>
+            <a href="/teams/board/#{u(@team.name)}/delete/topic/#{u(topic.discussion_board_topic_id)}" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+              <span>Delete</span>
+            </a>            
+          <?r end ?>
+        </div>
+        <div class="clear"></div>
+      </li>
+    <?r end ?>
+    </ul>
+  <?r else ?>
+    <p> This board has no topics yet...</p>
+  <?r end ?>
+<?r elsif @action == :edit_board ?>
+  <form action="/teams/board/#{u(@team.name)}/edit/topic/#{u(@topic.discussion_board_topic_id)}" method="post">
+    <ol>
+      <li>
+        <label for="title">Title*:</label>
+        <input type="text" name="title" id="title" value="#{h(@topic.title)}"/>
+      </li>
+      <li>
+        <input type="submit" value="Edit Topic" />
+      </li>
+    </ol>
+  </form>
+<?r elsif @action == :view_topic ?> 
+  <ul class="posts">
+  <?r 
+    i = 0
+    @topic_posts.each do |post| 
+      i = i+1
+  ?>
+    <li <?r if (i%2) == 0 ?>class="stripe_1"<?r else ?>class="stripe_2"<?r end ?>>
+
+      <div class="list_actions">
+        <?r if @team.team_lead == @me or post.user_username == @me.username ?>
+          <a href="/teams/board/#{u(@team.name)}/edit/post/#{u(post.discussion_board_post_id)}" class="list_item_edit" title="Edit">
+            <span>Edit</span>
+          </a>
+          <a href="/teams/board/#{u(@team.name)}/delete/post/#{u(post.discussion_board_post_id)}" onclick="return (confirm('Are you sure?'))" class="list_item_delete" title="Delete">
+            <span>Delete</span>
+          </a>            
+        <?r end ?>
+      </div>
+      
+      <div class="list_info">
+        <a href="/people/#{post.user_username}">#{post.user_username}</a>
+        on <strong>#{post.created_at.strftime("%B %d, %Y")}</strong>
+        at <strong>#{post.created_at.strftime("%I:%M %p")}</strong><br />
+        
+        <p>
+          #{nl2br(post.contents)}
+        </p>
+      </div>
+      
+      <div class="clear"></div>
+    </li>
+  <?r end ?>
+  </ul>
+  
+  <h4><a name="reply_to_post" id="no_link">Reply to this Topic</a></h4>
+  <form action="/teams/board/#{u(@team.name)}/add/post/#{@topic.discussion_board_topic_id}" method="post">
+    <ol>
+      <li>
+        <label for="contents">Post Content*:</label><br />
+        <textarea name="contents" id="contents" class="post_content"></textarea>
+      </li>
+      <li>
+        <input type="submit" value="Post Reply" />
+      </li>
+    </ol>
+  </form>
+<?r elsif @action == :edit_post ?> 
+  <form action="/teams/board/#{u(@team.name)}/edit/post/#{u(@post.discussion_board_post_id)}" method="post">
+    <ol>
+      <li><strong>Posted by: </strong>#{h(@post.user_username)}</li>
+      <li>
+        <label for="contents" >Post Contents*:</label>
+        <textarea name="contents" class="post_content" id="contents">#{h(@post.contents)}</textarea>
+      </li>
+      <li>
+        <input type="submit" value="Edit Context" />
+      </li>
+    </ol>
+  </form>
+<?r end ?>

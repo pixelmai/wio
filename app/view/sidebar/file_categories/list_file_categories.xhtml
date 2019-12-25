@@ -1,0 +1,18 @@
+<div class="sidebar_container">
+<h3>Related Tasks</h3>
+  <ul>
+    <li><a href="/my_account/files/categories/">Back to File Categories</a></li>
+    <li><a href="/my_account/files/">View All Files</a></li>
+  </ul>
+</div>
+
+<?r unless @me.file_categories.length == 0 ?>
+  <div class="sidebar_container">
+    <h3>My other file categories</h3>
+    <ul>
+    <?r @me.file_categories.all({:limit => 5}).each do |file_category| ?>
+      <li><a href="/my_account/files/categories/#{u(file_category.name)}">#{file_category.name}</a></li>
+    <?r end ?>
+    </ul>
+  </div>
+<?r end ?>

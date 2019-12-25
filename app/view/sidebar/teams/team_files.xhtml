@@ -1,0 +1,30 @@
+<?r if @file_action == :all_files ?>
+  <div class="sidebar_container">
+    <h3>Upload File</h3>
+    <form name='file_upload' enctype="multipart/form-data" action='/my_account/file_upload' method='post'>
+      <ol>
+        <li>
+          <label for="name">Name*:</label>
+          <input type="text" name="name" id="name" value=""/>
+        </li>
+        
+        <li>
+          <label for="file">File*:</label>
+          <input type='file' name='file' size="15" />
+        </li>
+        <li>
+          <input type="hidden" name="team" value="#{@team.name}" />
+          <input type="submit" value="Upload File" />
+        </li>
+      </ol>
+    </form>
+  </div>
+<?r else ?>
+
+<div class="sidebar_container">
+  <h3>Related Actions</h3>
+  <ul>
+    <li><a href="/teams/#{u(@team.name)}/files">Back to Team Files Home</a></li>
+  </ul>
+</div>
+<?r end ?>

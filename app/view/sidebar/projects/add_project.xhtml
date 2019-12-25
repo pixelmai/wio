@@ -1,0 +1,27 @@
+<div class="sidebar_container">
+  <h3>Add a Project</h3>
+
+  <form action="/my_account/add_project" method="post">
+    <ol>
+      <li>
+        <label for="name">Name*:</label>
+        <input type="text" name="name" id="name" value=""/>
+      </li>
+      <li>
+        <label for="description">Description:</label>
+        <textarea name="description" id="description"></textarea>
+      </li> 
+      <li>
+        <label for="default_context">Default Context:</label>
+        <select id="default_context" name="default_context">
+          <?r @me.contexts.each do |context| ?>
+            <option value="#{context.context_id}">#{context.name}</option>
+          <?r end ?>
+        </select>
+      </li>
+      <li>
+        <input type="submit" value="Add Project" />
+      </li>
+    </ol>
+  </form>
+</div>

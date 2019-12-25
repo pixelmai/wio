@@ -1,0 +1,34 @@
+<?r
+  if logged_in?
+    @me = User.get(session[:username])
+    @teams = @me.teams.all
+  end
+?>
+<div class="sidebar_container">
+  <h3>Search Team</h3>
+  <form action="/search" method="post">
+    <ol>
+      <li>
+        <label for="name">Team Name*:</label>
+        <input type="text" name="name" id="name"/>
+      </li>
+      <li>
+        <input type="hidden" name="search_type" value="team" />
+        <input type="submit" value="Search" />
+      </li>
+    </ol>
+  </form>
+</div>
+
+<?r if session[:username] ?>
+  <div class="sidebar_container">
+    <h3>Related Tasks</h3>
+    <ul>
+      <?r if @teams.length != 0 ?>
+        <li><a href="/my_account/teams">Manage My Teams</a>
+      <?r else ?>
+        <li><a href="/my_account/teams">Create a Team</a>
+      <?r end ?>
+    </ul>
+  </div>
+<?r end ?>

@@ -1,0 +1,125 @@
+<h2>#{@title}</h2>
+
+#{render_fragment 'notices.xhtml'}
+
+<?r if (@action == 'view') ?>
+  <ul class="message">
+    <li>
+      <strong>From:</strong> 
+      <a href="/people/#{u(@message.sender.username)}">
+        #{h(@message.sender.username)}
+      </a>
+    </li>
+    <li>
+      <strong>To:</strong>
+      <a href="/people/#{u(@message.recipient.username)}">
+        #{h(@message.recipient.username)}
+      </a>
+    </li>
+    <li><strong>Subject:</strong> #{h(@message.subject)}</li>
+    <li><strong>Message: </strong><br />
+      #{nl2br(h(@message.content))}
+    </li>
+  </ul>
+  
+  <?r if @message.recipient == @me ?>
+    <p>
+      <a href="/my_account/messages/#{u(@message.message_id)}/reply" class="button">
+        <span>Send Reply</span>
+      </a>
+    </p>
+  <?r end ?>
+  
+  <?r 
+    unless @message.read?
+      @message.read = true
+      @message.save
+    end
+  ?>
+<?r elsif @action == 'reply' ?>
+  
+    <form action="/people/#{u(@message.sender.username)}/send_message" method="post">
+    <ol>
+      <li>
+        <label for="for">For:</label> #{@message.sender.username}
+        <input type="hidden" name="for" id="for" value="#{h(@message.sender.username)}" />
+      </li>
+      <li>
+        <label for="subject">Subject:</label><br />
+        <input type="text" name="subject" id="subject" value="Re: #{h(@message.subject)}" />
+      </li>
+      <li>
+        <label for="content">Content:</label><br />
+        <textarea name="content" id="content" row="40">
+
+
+--------------------------
+#{h(@message.sender.username)} wrote:
+
+#{h(@message.content)}
+</textarea>
+      </li>
+      <li>
+        <input type="submit" value="Send Message" />
+      </li>
+    </ol>
+  </form>
+  
+<?r else ?>
+
+  <?r 
+    if (@action == 'sent')
+      messages = @me.messages.all(:sender_username => @me.username)
+    else
+      messages = @me.messages.all(:sender_username.not => @me.username, :order => [:read.asc])
+    end
+    if messages.length != 0 
+  ?>
+
+    <table class="messages" width="100%">
+      <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Received</th>
+        <th>Subject</th>
+      </tr>
+    <?r messages.each do |message| ?>
+      <?r
+        classes = []
+        classes << 'unread' unless message.read? 
+        classes << 'notice' if message.notice
+      ?>
+      <tr 
+        <?r unless classes.empty? ?>
+          class="#{classes.join(' ')}"
+        <?r end ?>
+      >
+        <td>
+          #{h(message.sender.username)}
+        </td>
+        <td>
+          #{h(message.recipient.username)}
+        </td>
+        <td>
+          #{h(message.date_sent.strftime("%m/%d/%y %l:%M %p"))}
+        </td>
+        <td>
+          <a href="/my_account/messages/#{u(message.message_id)}">
+            <?r if message.read? ?>
+              #{h(message.subject)}
+            <?r else ?>
+              <strong>#{h(message.subject)}</strong>
+            <?r end ?>
+          </a>
+        </td>
+      </tr>
+    <?r end ?>
+    </table>
+
+  <?r else ?>
+
+    <p>You have no messages yet.</p>
+
+  <?r end ?>
+
+<?r end ?>
