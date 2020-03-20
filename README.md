@@ -1,5 +1,5 @@
 # WIO 2009
-Web-Based Interactive Organizer with Mobile Support (WIO) is the thesis output for the fulfillment of my bachelor's degree program. This web application was completed in March 2009 and has not been updated ever since. 
+Web-Based Interactive Organizer with Mobile Support (WIO) is the thesis output for the fulfillment of my bachelor's degree program. **This web application was completed in March 2009 and has not been updated ever since**. 
 
 ## Software used
 * Ruby interpreter
